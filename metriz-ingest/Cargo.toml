@@ -1,0 +1,15 @@
+[package]
+name = "metriz-ingest"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[dependencies.confy]
+features = ["yaml_conf"]
+default-features = false
+
+diesel = { version = "1.4.4", features = ["postgres"] }
+dotenv = "0.15.0"
