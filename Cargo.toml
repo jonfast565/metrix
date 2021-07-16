@@ -1,0 +1,2 @@
+[workspace]
+members = [ "metriz-aggregate", "metriz-console", "metriz-database", "metriz-ingest" ]
