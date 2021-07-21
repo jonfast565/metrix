@@ -3,6 +3,10 @@
 pub mod schema;
 pub mod models;
 
-fn main() {
-    println!("Hello, world!");
+pub fn insert_metric() {
+
+}
+
+pub fn insert_metrics() {
+
 }

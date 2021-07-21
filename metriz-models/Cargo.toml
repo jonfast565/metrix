@@ -1,5 +1,5 @@
 [package]
-name = "metriz-database"
+name = "metriz-models"
 version = "0.1.0"
 edition = "2018"
 crate-type = "dylib"
@@ -7,5 +7,4 @@ crate-type = "dylib"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-diesel = { version = "1.4.4", features = ["postgres"] }
-dotenv = "0.15.0"
+uuid = { version = "0.8", features = ["serde", "v4"] }
