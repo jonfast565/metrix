@@ -1,5 +1,5 @@
 [package]
-name = "metriz-database"
+name = "metrix-database"
 version = "0.1.0"
 edition = "2018"
 crate-type = "dylib"
@@ -9,3 +9,4 @@ crate-type = "dylib"
 [dependencies]
 diesel = { version = "1.4.4", features = ["postgres"] }
 dotenv = "0.15.0"
+metrix-models = { path = "../metrix-models" }
