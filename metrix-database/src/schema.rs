@@ -8,5 +8,6 @@ table! {
         created_datetime -> Timestamp,
         last_modified_by -> Varchar,
         last_modified_by_datetime -> Timestamp,
+        data_grouping -> Nullable<Varchar>,
     }
 }
