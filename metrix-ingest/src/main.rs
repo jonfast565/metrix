@@ -1,18 +1,22 @@
 #[macro_use]
 extern crate rocket;
 
+mod request_models;
+
 use rocket::http::Status;
 use rocket::response::{content, status};
 use rocket::{Build, Request, Rocket};
+use crate::request_models::{MetricRequest, Options as OptionsRequest};
+use rocket::serde::json::{Json, Value, json};
 
-#[post("/metric")]
-fn post_metric() {
+#[post("/metric", format = "json", data = "<metric>")]
+fn post_metric(metric: Json<MetricRequest<'_>>) {
 
 }
 
-#[get("/metric")]
-fn get_metric() {
-    
+#[get("/metric?<opt..>")]
+fn get_metric(opt: OptionsRequest<'_>) {
+
 }
 
 #[catch(404)]

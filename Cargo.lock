@@ -658,6 +658,7 @@ dependencies = [
 name = "metrix-models"
 version = "0.1.0"
 dependencies = [
+ "serde 1.0.126",
  "uuid",
 ]
 
@@ -1019,6 +1020,7 @@ dependencies = [
  "rocket_codegen",
  "rocket_http",
  "serde 1.0.126",
+ "serde_json",
  "state",
  "tempfile",
  "time",

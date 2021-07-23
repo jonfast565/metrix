@@ -1,5 +1,7 @@
+use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Metric {
     pub id: Uuid,
     pub data_point: String,
