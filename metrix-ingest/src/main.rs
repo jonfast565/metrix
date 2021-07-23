@@ -4,7 +4,7 @@ extern crate rocket;
 mod request_models;
 
 use crate::request_models::{
-    MetricRequest, OptionsHistoryRequest, OptionsHistorySeriesRequest, OptionsRequest,
+    MetricQueryRequest, MetricPointQueryRequest, MetricRangeRequest, MetricInsertRequest
 };
 use rocket::http::Status;
 use rocket::response::{content, status};
@@ -12,16 +12,16 @@ use rocket::serde::json::{json, Json, Value};
 use rocket::{Build, Request, Rocket};
 
 #[post("/metric", format = "json", data = "<metric>")]
-fn post_metric(metric: Json<MetricRequest<'_>>) {}
+fn post_metric(metric: Json<MetricInsertRequest<'_>>) {}
 
 #[get("/metric?<opt..>")]
-fn get_metric(opt: OptionsRequest<'_>) {}
+fn get_metric(opt: MetricQueryRequest<'_>) {}
 
-#[get("/metric-history?<opt..>")]
-fn get_metric_history(opt: OptionsHistoryRequest<'_>) {}
+#[get("/metric-point?<opt..>")]
+fn get_metric_history(opt: MetricPointQueryRequest<'_>) {}
 
-#[get("/metric-history-series?<opt..>")]
-fn get_metric_series(opt: OptionsHistorySeriesRequest<'_>) {}
+#[get("/metric-series?<opt..>")]
+fn get_metric_series(opt: MetricRangeRequest<'_>) {}
 
 #[catch(404)]
 fn general_not_found() -> content::Html<&'static str> {

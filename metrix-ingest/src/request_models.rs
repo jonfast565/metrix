@@ -3,7 +3,7 @@ use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
-pub struct MetricRequest<'r> {
+pub struct MetricInsertRequest<'r> {
     pub id: Cow<'r, String>,
     pub data_point: Cow<'r, String>,
     pub data_type: Cow<'r, String>,
@@ -11,27 +11,27 @@ pub struct MetricRequest<'r> {
     pub data_value_numeric: f64,
 }
 
-impl MetricRequest<'_> {
-    pub fn to_metric(&self) {
-        
+impl MetricInsertRequest<'_> {
+    pub fn to_metric_insert(&self) -> metrix_models::MetricInsert {
+        metrix_models::MetricInsert::new_metric_insert(&self.id, &self.data_type, &self.data_point, &self.data_group, self.data_value_numeric)
     }
 }
 
 #[derive(FromForm)]
-pub struct OptionsRequest<'r> {
+pub struct MetricQueryRequest<'r> {
     data_point: Option<&'r str>,
     data_group: Option<&'r str>,
 }
 
 #[derive(FromForm)]
-pub struct OptionsHistoryRequest<'r> {
+pub struct MetricPointQueryRequest<'r> {
     data_point: Option<&'r str>,
     data_group: Option<&'r str>,
     date: Option<&'r str>,
 }
 
 #[derive(FromForm)]
-pub struct OptionsHistorySeriesRequest<'r> {
+pub struct MetricRangeRequest<'r> {
     data_point: Option<&'r str>,
     data_group: Option<&'r str>,
     start_date: Option<&'r str>,
