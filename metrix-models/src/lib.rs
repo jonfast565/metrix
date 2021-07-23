@@ -5,6 +5,7 @@ use uuid::Uuid;
 pub struct Metric {
     pub id: Uuid,
     pub data_point: String,
+    pub data_group: Option<String>,
     pub data_type: String,
     pub data_value_numeric: f64,
 }
