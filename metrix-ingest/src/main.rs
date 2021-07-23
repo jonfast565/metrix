@@ -2,26 +2,11 @@
 extern crate rocket;
 
 mod request_models;
+mod routes;
 
-use crate::request_models::{
-    MetricQueryRequest, MetricPointQueryRequest, MetricRangeRequest, MetricInsertRequest
-};
 use rocket::http::Status;
 use rocket::response::{content, status};
-use rocket::serde::json::{json, Json, Value};
-use rocket::{Build, Request, Rocket};
-
-#[post("/metric", format = "json", data = "<metric>")]
-fn post_metric(metric: Json<MetricInsertRequest<'_>>) {}
-
-#[get("/metric?<opt..>")]
-fn get_metric(opt: MetricQueryRequest<'_>) {}
-
-#[get("/metric-point?<opt..>")]
-fn get_metric_history(opt: MetricPointQueryRequest<'_>) {}
-
-#[get("/metric-series?<opt..>")]
-fn get_metric_series(opt: MetricRangeRequest<'_>) {}
+use rocket::{Request};
 
 #[catch(404)]
 fn general_not_found() -> content::Html<&'static str> {
@@ -37,7 +22,7 @@ fn default_catcher(status: Status, req: &Request<'_>) -> status::Custom<String> 
 #[rocket::main]
 async fn main() {
     if let Err(e) = rocket::build()
-        .mount("/", routes![get_metric, post_metric])
+        .mount("/", routes![routes::get_metric, routes::post_metric])
         .register("/", catchers![general_not_found, default_catcher])
         .launch()
         .await
