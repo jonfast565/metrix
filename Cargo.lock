@@ -130,6 +130,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "chrono"
+version = "0.4.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "670ad68c9088c2a963aaa298cb369688cf3f9465ce5e2d4ca10e6e0098a1ce73"
+dependencies = [
+ "libc",
+ "num-integer",
+ "num-traits 0.2.14",
+ "rustc-serialize",
+ "serde 1.0.126",
+ "time 0.1.43",
+ "winapi",
+]
+
+[[package]]
 name = "config"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -164,7 +179,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d5f1c7727e460397e56abc4bddc1d49e07a1ad78fc98eb2e1c8f032a58a2f80d"
 dependencies = [
  "percent-encoding",
- "time",
+ "time 0.2.27",
  "version_check",
 ]
 
@@ -658,6 +673,7 @@ dependencies = [
 name = "metrix-models"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "serde 1.0.126",
  "uuid",
 ]
@@ -729,6 +745,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f6bb902e437b6d86e03cce10a7e2af662292c5dfef23b65899ea3ac9354ad44"
 dependencies = [
  "winapi",
+]
+
+[[package]]
+name = "num-integer"
+version = "0.1.44"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2cc698a63b549a70bc047073d2949cce27cd1c7b0a4a862d08a8031bc2801db"
+dependencies = [
+ "autocfg",
+ "num-traits 0.2.14",
 ]
 
 [[package]]
@@ -1023,7 +1049,7 @@ dependencies = [
  "serde_json",
  "state",
  "tempfile",
- "time",
+ "time 0.2.27",
  "tokio",
  "tokio-stream",
  "tokio-util",
@@ -1071,7 +1097,7 @@ dependencies = [
  "smallvec",
  "stable-pattern",
  "state",
- "time",
+ "time 0.2.27",
  "tokio",
  "uncased",
 ]
@@ -1081,6 +1107,12 @@ name = "rust-ini"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3e52c148ef37f8c375d49d5a73aa70713125b7f19095948a923f80afdeb22ec2"
+
+[[package]]
+name = "rustc-serialize"
+version = "0.3.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcf128d1287d2ea9d80910b5f1120d0b8eede3fbf1abe91c40d39ea7d51e6fda"
 
 [[package]]
 name = "rustc_version"
@@ -1364,6 +1396,16 @@ dependencies = [
  "rand",
  "redox_syscall",
  "remove_dir_all",
+ "winapi",
+]
+
+[[package]]
+name = "time"
+version = "0.1.43"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"
+dependencies = [
+ "libc",
  "winapi",
 ]
 

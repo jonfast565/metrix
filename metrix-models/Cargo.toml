@@ -8,4 +8,5 @@ crate-type = "dylib"
 
 [dependencies]
 uuid = { version = "0.8", features = ["serde", "v4"] }
-serde = "1.0.126"
+serde = { version = "1.0.126", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde", "rustc-serialize"] }
