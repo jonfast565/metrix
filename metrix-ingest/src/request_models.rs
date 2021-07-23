@@ -1,6 +1,5 @@
-
+use rocket::serde::{Deserialize, Serialize};
 use std::borrow::Cow;
-use rocket::serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -12,6 +11,19 @@ pub struct MetricRequest<'r> {
 }
 
 #[derive(FromForm)]
-pub struct Options<'r> {
+pub struct OptionsRequest<'r> {
     name: Option<&'r str>,
+}
+
+#[derive(FromForm)]
+pub struct OptionsHistoryRequest<'r> {
+    name: Option<&'r str>,
+    date: Option<&'r str>,
+}
+
+#[derive(FromForm)]
+pub struct OptionsHistorySeriesRequest<'r> {
+    name: Option<&'r str>,
+    start_date: Option<&'r str>,
+    end_date: Option<&'r str>,
 }
