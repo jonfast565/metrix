@@ -668,12 +668,15 @@ dependencies = [
 name = "metrix-database"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "diesel",
  "dotenv",
  "metrix-models",
  "r2d2",
  "r2d2-diesel",
  "rocket",
+ "serde 1.0.126",
+ "uuid",
 ]
 
 [[package]]

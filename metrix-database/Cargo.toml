@@ -13,3 +13,6 @@ rocket = { version = "0.5.0-rc.1", features = ["json"] }
 r2d2 = "0.8.9"
 r2d2-diesel = "1.0.0"
 metrix-models = { path = "../metrix-models" }
+uuid = { version = "0.6.5", features = ["serde", "v4"] }
+serde = { version = "1.0.126", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
