@@ -13,21 +13,23 @@ pub struct MetricInsertDb {
     pub data_value_numeric: PgNumeric,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Queryable)]
 pub struct MetricQueryDb {
     pub data_point: String,
     pub data_group: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Queryable)]
 pub struct MetricPointQueryDb {
-    pub metric_query: MetricQueryDb,
+    pub data_point: String,
+    pub data_group: Option<String>,
     pub date: NaiveDateTime,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Queryable)]
 pub struct MetricRangeQueryDb {
-    pub metric_query: MetricQueryDb,
+    pub data_point: String,
+    pub data_group: Option<String>,
     pub start_date: NaiveDateTime,
     pub end_date: NaiveDateTime,
 }
