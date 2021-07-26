@@ -1,5 +1,8 @@
 #[macro_use]
 extern crate diesel;
+
+use bigdecimal::FromPrimitive;
+use bigdecimal::BigDecimal;
 use self::diesel::prelude::*;
 use self::models::*;
 
@@ -8,23 +11,38 @@ pub mod schema;
 
 use diesel::PgConnection;
 
-pub fn insert_metric() {
+pub fn insert_metric(model: &metrix_models::MetricInsert, conn: &PgConnection) {
+    let metric_db = MetricInsertDb {
+        id: model.id,
+        data_point: model.data_point.to_string(),
+        data_grouping: Some(model.data_group.as_ref().unwrap().to_string()),
+        data_type: model.data_type.to_string(),
+        data_value_numeric: BigDecimal::from_f64(model.data_value_numeric).unwrap(),
+    };
+    insert_metric_internal(&metric_db, conn);
+}
+
+pub fn insert_metrics(models: &Vec<metrix_models::MetricInsert>, conn: &PgConnection) {
+    let db_models: Vec<MetricInsertDb> = models.into_iter().map(|model| MetricInsertDb {
+        id: model.id,
+        data_point: model.data_point.to_string(),
+        data_grouping: Some(model.data_group.as_ref().unwrap().to_string()),
+        data_type: model.data_type.to_string(),
+        data_value_numeric: BigDecimal::from_f64(model.data_value_numeric).unwrap(),
+    }).collect();
+
+    insert_metrics_internal(&db_models, conn);
+}
+
+pub fn get_metrics(model: &metrix_models::MetricQuery, conn: &PgConnection) {
 
 }
 
-pub fn insert_metrics() {
+pub fn get_metric_history(model: &metrix_models::MetricPointQuery, conn: &PgConnection) {
 
 }
 
-pub fn get_metrics() {
-
-}
-
-pub fn get_metric_history() {
-
-}
-
-pub fn get_metric_series_history() {
+pub fn get_metric_series_history(model: &metrix_models::MetricRangeQuery, conn: &PgConnection) {
     
 }
 
@@ -35,7 +53,7 @@ fn insert_metric_internal(model: &MetricInsertDb, conn: &PgConnection) {
         .expect("Error inserting row into database");
 }
 
-fn insert_metrics_internal(models: Vec<&MetricInsertDb>, conn: &PgConnection) {
+fn insert_metrics_internal(models: &Vec<MetricInsertDb>, conn: &PgConnection) {
     diesel::insert_into(schema::metric::table)
         .values(models)
         .execute(conn)

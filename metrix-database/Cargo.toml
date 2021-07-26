@@ -7,7 +7,7 @@ crate-type = "dylib"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-diesel = { version = "1.4.4", features = ["postgres", "uuid", "chrono"] }
+diesel = { version = "1.4.4", features = ["postgres", "uuid", "chrono", "numeric"] }
 dotenv = "0.15.0"
 rocket = { version = "0.5.0-rc.1", features = ["json"] }
 r2d2 = "0.8.9"
@@ -16,3 +16,4 @@ metrix-models = { path = "../metrix-models" }
 uuid = { version = "0.6.5", features = ["serde", "v4"] }
 serde = { version = "1.0.126", features = ["derive"] }
 chrono = { version = "0.4", features = ["serde"] }
+bigdecimal = "0.1.2"

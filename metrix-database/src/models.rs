@@ -1,4 +1,5 @@
-use diesel::pg::data_types::{PgNumeric, PgTimestamp};
+use bigdecimal::BigDecimal;
+use diesel::pg::data_types::{PgTimestamp};
 use chrono::prelude::*;
 use uuid::Uuid;
 use crate::schema::metric;
@@ -10,7 +11,7 @@ pub struct MetricInsertDb {
     pub data_point: String,
     pub data_grouping: Option<String>,
     pub data_type: String,
-    pub data_value_numeric: PgNumeric,
+    pub data_value_numeric: BigDecimal,
 }
 
 #[derive(Debug, Queryable)]
@@ -39,7 +40,7 @@ pub struct MetricResultDb {
     pub id: Uuid,
     pub data_point: String,
     pub data_type: String,
-    pub data_value_numeric: PgNumeric,
+    pub data_value_numeric: BigDecimal,
     pub created_by: String,
     pub created_datetime: PgTimestamp,
     pub last_modified_by: String,
