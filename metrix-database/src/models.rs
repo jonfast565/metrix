@@ -1,5 +1,4 @@
 use bigdecimal::BigDecimal;
-use diesel::pg::data_types::{PgTimestamp};
 use chrono::prelude::*;
 use uuid::Uuid;
 use crate::schema::metric;
@@ -42,8 +41,8 @@ pub struct MetricResultDb {
     pub data_type: String,
     pub data_value_numeric: BigDecimal,
     pub created_by: String,
-    pub created_datetime: PgTimestamp,
+    pub created_datetime: NaiveDateTime,
     pub last_modified_by: String,
-    pub last_modified_by_datetime: PgTimestamp,
+    pub last_modified_by_datetime: NaiveDateTime,
     pub data_grouping: Option<String>,
 }

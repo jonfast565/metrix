@@ -711,6 +711,7 @@ dependencies = [
 name = "metrix-models"
 version = "0.1.0"
 dependencies = [
+ "bigdecimal",
  "chrono",
  "serde 1.0.126",
  "uuid",
