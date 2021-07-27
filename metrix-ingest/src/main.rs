@@ -26,7 +26,12 @@ fn default_catcher(status: Status, req: &Request<'_>) -> status::Custom<String> 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![routes::get_metric, routes::post_metric])
+        .mount("/", routes![
+            routes::get_metric, 
+            routes::post_metric,
+            routes::get_metric_history,
+            routes::get_metric_series
+            ])
         .register("/", catchers![general_not_found, default_catcher])
         .attach(MetrixDatabaseConnection::fairing())
 }

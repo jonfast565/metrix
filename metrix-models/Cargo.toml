@@ -10,4 +10,4 @@ crate-type = "dylib"
 uuid = { version = "0.6.5", features = ["serde", "v4"] }
 serde = { version = "1.0.126", features = ["derive"] }
 chrono = { version = "0.4", features = ["serde"] }
-bigdecimal = "0.1.2"
+bigdecimal = { version = "0.1.2", features = ["serde"] }

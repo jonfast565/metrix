@@ -90,6 +90,7 @@ dependencies = [
  "num-bigint",
  "num-integer",
  "num-traits 0.2.14",
+ "serde 1.0.126",
 ]
 
 [[package]]

@@ -12,16 +12,22 @@ pub async fn post_metric(conn: MetrixDatabaseConnection, metric: Json<MetricInse
 }
 
 #[get("/metric?<opt..>")]
-pub fn get_metric(conn: MetrixDatabaseConnection, opt: MetricQueryRequest<'_>) {
-    let getter = opt.to_metric_query();
+pub async fn get_metric(conn: MetrixDatabaseConnection, opt: MetricQueryRequest<'_>) -> Json<Vec<metrix_models::MetricResult>> {
+    let getter = opt.to_metric_query(); 
+    let result = conn.run(move |c| metrix_database::get_metrics(&getter, c)).await;
+    Json(result)
 }
 
 #[get("/metric-point?<opt..>")]
-pub fn get_metric_history(conn: MetrixDatabaseConnection, opt: MetricPointQueryRequest<'_>) {
+pub async fn get_metric_history(conn: MetrixDatabaseConnection, opt: MetricPointQueryRequest<'_>) -> Json<Vec<metrix_models::MetricResult>> {
     let getter = opt.to_metric_point_query();
+    let result = conn.run(move |c| metrix_database::get_metric_history(&getter, c)).await;
+    Json(result)
 }
 
 #[get("/metric-series?<opt..>")]
-pub fn get_metric_series(conn: MetrixDatabaseConnection, opt: MetricRangeRequest<'_>) {
+pub async fn get_metric_series(conn: MetrixDatabaseConnection, opt: MetricRangeRequest<'_>) -> Json<Vec<metrix_models::MetricResult>> {
     let getter = opt.to_metric_point_query();
+    let result = conn.run(move |c| metrix_database::get_metric_series_history(&getter, c)).await;
+    Json(result)
 }
