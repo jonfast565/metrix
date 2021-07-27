@@ -10,7 +10,7 @@ use rocket::Request;
 use rocket_sync_db_pools::{database, diesel};
 
 #[database("metrix_db")]
-struct MetrixDatabaseConnection(diesel::PgConnection);
+pub struct MetrixDatabaseConnection(diesel::PgConnection);
 
 #[catch(404)]
 fn general_not_found() -> content::Html<&'static str> {

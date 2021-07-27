@@ -1,2 +1,2 @@
 [global.databases]
-metrix_db = { url = "postgresql://localhost:5432/metrizdb?user=metriz-db&password=test1234" }
+metrix_db = { url = "postgresql://localhost:5432/metrizdb?user=metriz-db&password=test1234", pool_size = 20 }
