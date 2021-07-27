@@ -9,7 +9,6 @@ crate-type = "dylib"
 [dependencies]
 diesel = { version = "1.4.4", features = ["postgres", "uuid", "chrono", "numeric"] }
 dotenv = "0.15.0"
-rocket = { version = "0.5.0-rc.1", features = ["json"] }
 r2d2 = "0.8.9"
 r2d2-diesel = "1.0.0"
 metrix-models = { path = "../metrix-models" }

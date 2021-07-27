@@ -6,7 +6,11 @@ mod routes;
 
 use rocket::http::Status;
 use rocket::response::{content, status};
-use rocket::{Request};
+use rocket::Request;
+use rocket_sync_db_pools::{database, diesel};
+
+#[database("metrix_db")]
+struct MetrixDatabaseConnection(diesel::PgConnection);
 
 #[catch(404)]
 fn general_not_found() -> content::Html<&'static str> {
@@ -19,15 +23,10 @@ fn default_catcher(status: Status, req: &Request<'_>) -> status::Custom<String> 
     status::Custom(status, msg)
 }
 
-#[rocket::main]
-async fn main() {
-    if let Err(e) = rocket::build()
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
         .mount("/", routes![routes::get_metric, routes::post_metric])
         .register("/", catchers![general_not_found, default_catcher])
-        .launch()
-        .await
-    {
-        println!("App didn't launch: {}", e);
-        drop(e);
-    }
+        .attach(MetrixDatabaseConnection::fairing())
 }

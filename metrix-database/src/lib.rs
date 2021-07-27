@@ -63,11 +63,14 @@ pub fn get_metrics(
     result
 }
 
-pub fn get_metric_history(model: &metrix_models::MetricPointQuery, conn: &PgConnection) -> Vec<metrix_models::MetricResult> {
+pub fn get_metric_history(
+    model: &metrix_models::MetricPointQuery,
+    conn: &PgConnection,
+) -> Vec<metrix_models::MetricResult> {
     let db_model = MetricPointQueryDb {
         data_group: Some(model.metric_query.data_group.as_ref().unwrap().to_string()),
         data_point: model.metric_query.data_point.to_string(),
-        date: model.date
+        date: model.date,
     };
     let results = get_metric_history_internal(db_model, conn);
     let result = results
@@ -87,12 +90,15 @@ pub fn get_metric_history(model: &metrix_models::MetricPointQuery, conn: &PgConn
     result
 }
 
-pub fn get_metric_series_history(model: &metrix_models::MetricRangeQuery, conn: &PgConnection) -> Vec<metrix_models::MetricResult> {
+pub fn get_metric_series_history(
+    model: &metrix_models::MetricRangeQuery,
+    conn: &PgConnection,
+) -> Vec<metrix_models::MetricResult> {
     let db_model = MetricRangeQueryDb {
         data_group: Some(model.metric_query.data_group.as_ref().unwrap().to_string()),
         data_point: model.metric_query.data_point.to_string(),
         start_date: model.start_date,
-        end_date: model.end_date
+        end_date: model.end_date,
     };
     let results = get_metric_series_history_internal(db_model, conn);
     let result = results
