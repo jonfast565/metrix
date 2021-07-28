@@ -3,8 +3,7 @@ name = "metrix-models"
 version = "0.1.0"
 edition = "2018"
 crate-type = "dylib"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 
 [dependencies]
 uuid = { version = "0.6.5", features = ["serde", "v4"] }
