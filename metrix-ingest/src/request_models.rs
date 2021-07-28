@@ -1,3 +1,5 @@
+use bigdecimal::BigDecimal;
+use std::str::FromStr;
 use rocket::serde::{Deserialize, Serialize};
 use std::borrow::Cow;
 use uuid::Uuid;
@@ -5,21 +7,20 @@ use uuid::Uuid;
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct MetricInsertRequest<'r> {
-    pub id: Cow<'r, String>,
     pub data_point: Cow<'r, String>,
     pub data_type: Cow<'r, String>,
     pub data_group: Cow<'r, String>,
-    pub data_value_numeric: f64,
+    pub data_value_numeric: Cow<'r, String>,
 }
 
 impl MetricInsertRequest<'_> {
     pub fn to_metric_insert(&self) -> metrix_models::MetricInsert {
         metrix_models::MetricInsert {
-            id: Uuid::parse_str(&self.id).unwrap(),
+            id: Uuid::new_v4(),
             data_type: self.data_type.to_string(),
             data_point: self.data_point.to_string(),
             data_group: Some(self.data_group.to_string()),
-            data_value_numeric: self.data_value_numeric
+            data_value_numeric: BigDecimal::from_str(&self.data_value_numeric).unwrap()
         }
     }
 }

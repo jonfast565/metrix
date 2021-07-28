@@ -9,7 +9,7 @@ pub struct MetricInsert {
     pub data_point: String,
     pub data_group: Option<String>,
     pub data_type: String,
-    pub data_value_numeric: f64,
+    pub data_value_numeric: BigDecimal,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

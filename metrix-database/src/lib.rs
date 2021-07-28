@@ -17,7 +17,7 @@ pub fn insert_metric(model: &metrix_models::MetricInsert, conn: &PgConnection) {
         data_point: model.data_point.to_string(),
         data_grouping: Some(model.data_group.as_ref().unwrap().to_string()),
         data_type: model.data_type.to_string(),
-        data_value_numeric: BigDecimal::from_f64(model.data_value_numeric).unwrap(),
+        data_value_numeric: model.data_value_numeric.clone(),
     };
     insert_metric_internal(&metric_db, conn);
 }
@@ -30,7 +30,7 @@ pub fn insert_metrics(models: &Vec<metrix_models::MetricInsert>, conn: &PgConnec
             data_point: model.data_point.to_string(),
             data_grouping: Some(model.data_group.as_ref().unwrap().to_string()),
             data_type: model.data_type.to_string(),
-            data_value_numeric: BigDecimal::from_f64(model.data_value_numeric).unwrap(),
+            data_value_numeric: model.data_value_numeric.clone(),
         })
         .collect();
 

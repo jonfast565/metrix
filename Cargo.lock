@@ -701,6 +701,7 @@ dependencies = [
 name = "metrix-ingest"
 version = "0.1.0"
 dependencies = [
+ "bigdecimal",
  "chrono",
  "config",
  "diesel",
