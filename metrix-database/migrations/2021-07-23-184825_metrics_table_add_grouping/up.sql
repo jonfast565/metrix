@@ -1,6 +1,9 @@
 -- Your SQL goes here
 alter table metric
 add column data_grouping varchar(255);
+alter table metric
+alter column data_value_numeric
+set data type numeric(50, 10);
 create view metric_view as
 select id,
     data_grouping,
@@ -11,4 +14,4 @@ select id,
     created_datetime,
     last_modified_by,
     last_modified_by_datetime
-    from metric
+from metric

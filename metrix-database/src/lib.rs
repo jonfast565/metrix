@@ -119,6 +119,7 @@ pub fn get_metric_series_history(
 }
 
 fn insert_metric_internal(model: &MetricInsertDb, conn: &PgConnection) {
+    dbg!(&model.data_value_numeric);
     diesel::insert_into(schema::metric::table)
         .values(model)
         .execute(conn)
