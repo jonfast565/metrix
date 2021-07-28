@@ -1,2 +1,2 @@
 [workspace]
-members = [ "metrix-aggregate", "metrix-console", "metrix-database", "metrix-ingest", "metrix-models" ]
+members = [ "metrix-aggregate", "metrix-console", "metrix-database", "metrix-ingest", "metrix-models", "metrix-utils" ]

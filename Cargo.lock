@@ -706,6 +706,7 @@ dependencies = [
  "diesel",
  "metrix-database",
  "metrix-models",
+ "metrix-utils",
  "rocket",
  "rocket_sync_db_pools",
  "uuid",
@@ -719,6 +720,13 @@ dependencies = [
  "chrono",
  "serde 1.0.126",
  "uuid",
+]
+
+[[package]]
+name = "metrix-utils"
+version = "0.1.0"
+dependencies = [
+ "chrono",
 ]
 
 [[package]]

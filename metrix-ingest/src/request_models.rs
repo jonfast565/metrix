@@ -1,7 +1,6 @@
 use rocket::serde::{Deserialize, Serialize};
 use std::borrow::Cow;
 use uuid::Uuid;
-use chrono::prelude::*;
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -54,7 +53,7 @@ impl MetricPointQueryRequest<'_> {
                 data_point: self.data_point.unwrap().to_string(),
                 data_group: Some(self.data_group.unwrap().to_string())
             },
-            date: NaiveDateTime::parse_from_str(self.date.unwrap(), "%Y-%m-%d %H:%M:%S").unwrap()
+            date: metrix_utils::parse_iso_date_str(self.date.unwrap())
         }
     }
 }
@@ -74,8 +73,8 @@ impl MetricRangeRequest<'_> {
                 data_point: self.data_point.unwrap().to_string(),
                 data_group: Some(self.data_group.unwrap().to_string())
             },
-            start_date: NaiveDateTime::parse_from_str(self.start_date.unwrap(), "%Y-%m-%d %H:%M:%S").unwrap(),
-            end_date: NaiveDateTime::parse_from_str(self.end_date.unwrap(), "%Y-%m-%d %H:%M:%S").unwrap()
+            start_date: metrix_utils::parse_iso_date_str(self.start_date.unwrap()),
+            end_date: metrix_utils::parse_iso_date_str(self.end_date.unwrap())
         }
     }
 }
