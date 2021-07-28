@@ -10,7 +10,7 @@ pub struct MetricInsertRequest<'r> {
     pub data_point: Cow<'r, String>,
     pub data_type: Cow<'r, String>,
     pub data_group: Cow<'r, String>,
-    pub data_value_numeric: Cow<'r, String>,
+    pub data_value_numeric: f64,
 }
 
 impl MetricInsertRequest<'_> {
@@ -20,7 +20,7 @@ impl MetricInsertRequest<'_> {
             data_type: self.data_type.to_string(),
             data_point: self.data_point.to_string(),
             data_group: Some(self.data_group.to_string()),
-            data_value_numeric: BigDecimal::from_str(&self.data_value_numeric).unwrap()
+            data_value_numeric: self.data_value_numeric,
         }
     }
 }
