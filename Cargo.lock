@@ -771,6 +771,7 @@ version = "0.1.0"
 name = "metrix-console"
 version = "0.1.0"
 dependencies = [
+ "metrix-http",
  "tui",
 ]
 

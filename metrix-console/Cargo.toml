@@ -6,3 +6,5 @@ authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 
 [dependencies]
 tui = { version = "0.15", default-features = false, features = ['crossterm'] }
+
+metrix-http = { path = "../metrix-http" }
