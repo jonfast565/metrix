@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello, world!");
+    panic!("Not implemented. This application should be used to aggregate daily data.")
 }
