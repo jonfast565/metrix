@@ -34,12 +34,9 @@ pub struct MetricRangeQuery {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MetricResult {
     pub id: Uuid,
+    pub data_grouping: Option<String>,
     pub data_point: String,
     pub data_type: String,
     pub data_value_numeric: BigDecimal,
-    pub created_by: String,
     pub created_datetime: NaiveDateTime,
-    pub last_modified_by: String,
-    pub last_modified_by_datetime: NaiveDateTime,
-    pub data_grouping: Option<String>,
 }

@@ -22,7 +22,7 @@ pub async fn get_metric(
     Json(result)
 }
 
-#[get("/metric-point?<data_point>&<data_group>&<date>")]
+#[get("/metric-history?<data_point>&<data_group>&<date>")]
 pub async fn get_metric_history(
     conn: MetrixDatabaseConnection,
     data_point: &str,
