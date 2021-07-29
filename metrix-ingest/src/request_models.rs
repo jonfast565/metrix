@@ -52,7 +52,7 @@ impl MetricPointQueryRequest<'_> {
                 data_point: self.data_point.unwrap().to_string(),
                 data_group: Some(self.data_group.unwrap().to_string())
             },
-            date: metrix_utils::parse_iso_date_str(self.date.unwrap())
+            date: metrix_utils::time::parse_iso_date_str(self.date.unwrap())
         }
     }
 }
@@ -72,8 +72,8 @@ impl MetricRangeRequest<'_> {
                 data_point: self.data_point.unwrap().to_string(),
                 data_group: Some(self.data_group.unwrap().to_string())
             },
-            start_date: metrix_utils::parse_iso_date_str(self.start_date.unwrap()),
-            end_date: metrix_utils::parse_iso_date_str(self.end_date.unwrap())
+            start_date: metrix_utils::time::parse_iso_date_str(self.start_date.unwrap()),
+            end_date: metrix_utils::time::parse_iso_date_str(self.end_date.unwrap())
         }
     }
 }

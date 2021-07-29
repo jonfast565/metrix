@@ -727,6 +727,7 @@ name = "metrix-utils"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "rocket",
 ]
 
 [[package]]
