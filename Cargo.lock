@@ -794,7 +794,10 @@ name = "metrix-http"
 version = "0.1.0"
 dependencies = [
  "metrix-models",
+ "metrix-utils",
  "reqwest",
+ "serde 1.0.126",
+ "serde_json",
 ]
 
 [[package]]
