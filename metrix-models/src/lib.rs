@@ -13,6 +13,14 @@ pub struct MetricInsert {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct MetricInsertPartial {
+    pub data_point: String,
+    pub data_group: Option<String>,
+    pub data_type: String,
+    pub data_value_numeric: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct MetricQuery {
     pub data_point: String,
     pub data_group: Option<String>,
