@@ -2,7 +2,6 @@
 name = "metrix-models"
 version = "0.1.0"
 edition = "2018"
-crate-type = "dylib"
 authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 
 [dependencies]
