@@ -10,3 +10,4 @@ systemstat = "0.1.8"
 sys-info = "0.9"
 
 metrix-http = { path = "../metrix-http" }
+metrix-models = { path = "../metrix-models" }

@@ -817,6 +817,7 @@ name = "metrix-agent"
 version = "0.1.0"
 dependencies = [
  "metrix-http",
+ "metrix-models",
  "sys-info",
  "systemstat",
 ]
@@ -880,6 +881,7 @@ name = "metrix-models"
 version = "0.1.0"
 dependencies = [
  "bigdecimal",
+ "bytesize",
  "chrono",
  "serde 1.0.126",
  "uuid",

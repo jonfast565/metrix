@@ -3,6 +3,8 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+pub mod sizes;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MetricInsert {
     pub id: Uuid,
@@ -47,4 +49,10 @@ pub struct MetricResult {
     pub data_type: String,
     pub data_value_numeric: BigDecimal,
     pub created_datetime: NaiveDateTime,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MetricSizePartial {
+    pub data_type: String,
+    pub data_value_numeric: BigDecimal,  
 }
