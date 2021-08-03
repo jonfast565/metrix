@@ -44,7 +44,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         };
         send_metrics(&aggregated_info).await?;
         match rx.try_recv() {
-            Ok(_) => break,
+            Ok(_) => {
+                info!("Ctrl + C invoked. Application will quit now");
+                break
+            },
             _ => {
                 // wait
                 info!("Waiting 30 seconds");
