@@ -110,7 +110,7 @@ pub fn get_battery_life() -> Option<BatteryLife> {
     match sys.battery_life() {
         Ok(battery) => {
             info!(
-                "Battery: {}%, {}h{}m remaining",
+                "Battery: {}%, {} hours and {} minutes remaining",
                 battery.remaining_capacity * 100.0,
                 battery.remaining_time.as_secs() / 3600,
                 battery.remaining_time.as_secs() % 60

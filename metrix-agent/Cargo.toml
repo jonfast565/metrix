@@ -13,6 +13,7 @@ log = "0.4"
 pretty_env_logger = "0.3"
 tokio = "1.9.0"
 chrono = { version = "0.4", features = ["serde", "rustc-serialize"] }
+ctrlc = { version = "3.0", features = ["termination"] }
 
 metrix-http = { path = "../metrix-http" }
 metrix-models = { path = "../metrix-models" }

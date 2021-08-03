@@ -1,8 +1,10 @@
 #[macro_use] extern crate log;
 
+use tokio::time::sleep;
 use crate::models::AggregatedInfo;
 use std::time::Duration;
-use std::thread;
+use std::sync::mpsc::channel;
+use ctrlc;
 
 mod models;
 mod device_metrics;
@@ -11,6 +13,9 @@ mod device_metrics;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     pretty_env_logger::init();
     info!("{}", metrix_utils::get_header("Agent"));
+    let (tx, rx) = channel();
+    ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))
+        .expect("Error setting Ctrl-C handler");
     loop {
         let host_information = device_metrics::get_host_information().await?;
         let mount_points = device_metrics::get_mounts();
@@ -38,13 +43,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             uptime_seconds: -1.0,
         };
         send_metrics(&aggregated_info).await?;
-        // wait so we don't send crazy amounts of data...
-        info!("Waiting 30 seconds");
-        thread::sleep(Duration::from_secs(30));
+        match rx.try_recv() {
+            Ok(_) => break,
+            _ => {
+                // wait
+                info!("Waiting 30 seconds");
+                sleep(Duration::from_secs(30)).await;
+            }
+        }
     }
     Ok(())
 }
 
+async fn send_metric(hostname: String, data_point: String, data_type: String, value: f64) -> Result<(), Box<dyn std::error::Error>> {
+    let model = metrix_models::MetricInsertPartial {
+        data_group: Some(hostname),
+        data_point: data_point,
+        data_type: data_type,
+        data_value_numeric: value 
+    };
+    Ok(metrix_http::post_metric(model).await?)
+}
+
 async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn std::error::Error>> {
+    trace!("Sending metrics to server...");
     Ok(())
 }

@@ -1,15 +1,20 @@
 pub const BASE_URL: &'static str = "http://localhost:8000";
 
 //#[post("/metric", format = "json", data = "<metric>")]
-pub async fn post_metric(model: metrix_models::MetricInsertPartial) {
+pub async fn post_metric(model: metrix_models::MetricInsertPartial) -> Result<(), reqwest::Error> {
     let client = reqwest::Client::new();
-    let _res = client.post(format!("{}/metric", BASE_URL)).json(&model).send().await;
+    let res = client.post(format!("{}/metric", BASE_URL)).json(&model).send().await;
+    let result = match res {
+        Ok(_) => Ok(()),
+        Err(x) => Err(x)
+    };
+    result
 }
 
 //#[get("/metric?<data_point>&<data_group>")]
 pub async fn get_metric(
     query: metrix_models::MetricQuery
-) -> Vec<metrix_models::MetricResult> {
+) -> Result<Vec<metrix_models::MetricResult>, reqwest::Error> {
     let client = reqwest::Client::new();
     let params = vec![
         ("data_point", query.data_point),
@@ -17,8 +22,8 @@ pub async fn get_metric(
     ];
     let res = client.get(format!("{}/metric", BASE_URL)).query(&params).send().await;
     let result = match res {
-        Ok(x) => x.json::<Vec<metrix_models::MetricResult>>().await.unwrap(),
-        Err(_) => panic!("Unable to get metric")
+        Ok(x) => Ok(x.json::<Vec<metrix_models::MetricResult>>().await.unwrap()),
+        Err(x) => Err(x)
     };
     result
 }
@@ -26,7 +31,7 @@ pub async fn get_metric(
 // #[get("/metric-history?<data_point>&<data_group>&<date>")]
 pub async fn get_metric_history(
     query: metrix_models::MetricPointQuery
-) -> Vec<metrix_models::MetricResult> {
+) -> Result<Vec<metrix_models::MetricResult>, reqwest::Error> {
     let client = reqwest::Client::new();
     let params = vec![
         ("data_point", query.metric_query.data_point),
@@ -35,8 +40,8 @@ pub async fn get_metric_history(
     ];
     let res = client.get(format!("{}/metric-history", BASE_URL)).query(&params).send().await;
     let result = match res {
-        Ok(x) => x.json::<Vec<metrix_models::MetricResult>>().await.unwrap(),
-        Err(_) => panic!("Unable to get metric")
+        Ok(x) => Ok(x.json::<Vec<metrix_models::MetricResult>>().await.unwrap()),
+        Err(x) => Err(x)
     };
     result
 }
@@ -44,7 +49,7 @@ pub async fn get_metric_history(
 // #[get("/metric-series?<data_point>&<data_group>&<start_date>&<end_date>")]
 pub async fn get_metric_series(
     query: metrix_models::MetricRangeQuery
-) -> Vec<metrix_models::MetricResult> {
+) -> Result<Vec<metrix_models::MetricResult>, reqwest::Error> {
     let client = reqwest::Client::new();
     let params = vec![
         ("data_point", query.metric_query.data_point),
@@ -54,8 +59,8 @@ pub async fn get_metric_series(
     ];
     let res = client.get(format!("{}/metric-series", BASE_URL)).query(&params).send().await;
     let result = match res {
-        Ok(x) => x.json::<Vec<metrix_models::MetricResult>>().await.unwrap(),
-        Err(_) => panic!("Unable to get metric")
+        Ok(x) => Ok(x.json::<Vec<metrix_models::MetricResult>>().await.unwrap()),
+        Err(x) => Err(x)
     };
     result
 }
