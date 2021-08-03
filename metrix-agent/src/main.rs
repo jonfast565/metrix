@@ -1,3 +1,5 @@
+#[macro_use] extern crate log;
+
 use std::time::Duration;
 use crate::models::MountPoint;
 use std::thread;
@@ -6,11 +8,12 @@ mod models;
 mod device_metrics;
 
 fn main() {
+    pretty_env_logger::init();
     loop {
         let _mount_points = device_metrics::get_mounts();
-        device_metrics::get_block_device_stats();
+        let _block_device_stats = device_metrics::get_block_device_stats();
         device_metrics::get_networks();
-        device_metrics::get_network_interface_stats();
+        // device_metrics::get_network_interface_stats();
         device_metrics::get_battery_life();
         device_metrics::get_on_ac_power();
         device_metrics::get_memory_usage();

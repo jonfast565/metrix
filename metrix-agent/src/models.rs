@@ -8,3 +8,7 @@ pub struct MountPoint {
     pub avail: ByteSize, 
     pub total: ByteSize
 }
+
+pub struct BlockStats {
+    
+}
