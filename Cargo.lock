@@ -1095,6 +1095,12 @@ dependencies = [
 [[package]]
 name = "metrix-aggregate"
 version = "0.1.0"
+dependencies = [
+ "metrix-database",
+ "metrix-http",
+ "metrix-models",
+ "metrix-utils",
+]
 
 [[package]]
 name = "metrix-console"

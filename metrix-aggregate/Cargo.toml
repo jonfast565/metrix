@@ -5,3 +5,8 @@ edition = "2018"
 authors = ["Jon Fast <jnfstdj656@gmail.com>"]
 
 [dependencies]
+
+metrix-http = { path = "../metrix-http" }
+metrix-database = { path = "../metrix-database" }
+metrix-models = { path = "../metrix-models" }
+metrix-utils = { path = "../metrix-utils" }

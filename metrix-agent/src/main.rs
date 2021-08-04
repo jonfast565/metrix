@@ -43,18 +43,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             uptime_seconds: uptime.unwrap().as_secs_f32(),
         };
         send_metrics(&aggregated_info).await?;
-        info!("Done");
-        info!("Use Ctrl + C to quit...");
+        info!("Done. Use Ctrl + C to quit.");
+        info!("5 seconds until next run.");
         match rx.recv_timeout(Duration::from_secs(5)) {
             Ok(_) => {
                 info!("Ctrl + C invoked. Application will quit now");
                 break;
             }
-            _ => {
-                // wait
-                info!("Waiting 30 seconds");
-                sleep(Duration::from_secs(30)).await;
-            }
+            _ => {}
         }
     }
     Ok(())
@@ -86,6 +82,24 @@ async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn st
         aggregated_info.mount_points.len() as f64,
     )
     .await?;
+
+    for mount_point in &aggregated_info.mount_points {
+        send_metric(
+            aggregated_info.sys_info.hostname.clone(),
+            format!("Available Space {}", mount_point.fs_mounted_on).to_string(),
+            "Bytes".to_string(),
+            mount_point.avail.as_u64() as f64,
+        )
+        .await?;
+
+        send_metric(
+            aggregated_info.sys_info.hostname.clone(),
+            format!("Total Space {}", mount_point.fs_mounted_on).to_string(),
+            "Bytes".to_string(),
+            mount_point.total.as_u64() as f64,
+        )
+        .await?;
+    }
 
     send_metric(
         aggregated_info.sys_info.hostname.clone(),
@@ -121,6 +135,14 @@ async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn st
 
     send_metric(
         aggregated_info.sys_info.hostname.clone(),
+        "CPU Idle".to_string(),
+        "Percentage".to_string(),
+        aggregated_info.cpu_load.idle as f64,
+    )
+    .await?;
+
+    send_metric(
+        aggregated_info.sys_info.hostname.clone(),
         "Memory Used".to_string(),
         "Bytes".to_string(),
         aggregated_info.memory_stats.used as f64,
@@ -131,15 +153,7 @@ async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn st
         aggregated_info.sys_info.hostname.clone(),
         "Memory Total".to_string(),
         "Bytes".to_string(),
-        aggregated_info.memory_stats.used as f64,
-    )
-    .await?;
-
-    send_metric(
-        aggregated_info.sys_info.hostname.clone(),
-        "Memory Total".to_string(),
-        "Bytes".to_string(),
-        aggregated_info.memory_stats.used as f64,
+        aggregated_info.memory_stats.all as f64,
     )
     .await?;
 
