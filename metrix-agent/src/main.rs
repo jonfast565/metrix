@@ -13,7 +13,7 @@ mod models;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     pretty_env_logger::init();
-    info!("{}", metrix_utils::get_header("Agent"));
+    println!("{}", metrix_utils::get_header("Agent"));
     let (tx, rx) = channel();
     ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))
         .expect("Error setting Ctrl-C handler");
@@ -43,6 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             uptime_seconds: uptime.unwrap().as_secs_f32(),
         };
         send_metrics(&aggregated_info).await?;
+        info!("Done");
         info!("Use Ctrl + C to quit...");
         match rx.recv_timeout(Duration::from_secs(5)) {
             Ok(_) => {
@@ -75,7 +76,7 @@ async fn send_metric(
 }
 
 async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn std::error::Error>> {
-    trace!("Sending metrics to server...");
+    info!("Sending metrics to server...");
 
     // number of mount points
     send_metric(
