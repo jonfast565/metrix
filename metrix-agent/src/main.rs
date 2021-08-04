@@ -43,7 +43,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             uptime_seconds: -1.0,
         };
         send_metrics(&aggregated_info).await?;
-        match rx.try_recv() {
+        info!("Use Ctrl + C to quit...");
+        match rx.recv_timeout(Duration::from_secs(5)) {
             Ok(_) => {
                 info!("Ctrl + C invoked. Application will quit now");
                 break
