@@ -1,10 +1,15 @@
 #[macro_use]
 extern crate rocket;
 
+#[macro_use]
+extern crate log;
+
 mod request_models;
 mod routes;
 mod ingest_queue;
 
+use crate::ingest_queue::InsertQueueManager;
+use dotenv::dotenv;
 use rocket::http::Status;
 use rocket::response::{content, status};
 use rocket::Request;
@@ -26,15 +31,27 @@ fn default_catcher(status: Status, req: &Request<'_>) -> status::Custom<String> 
 
 #[launch]
 fn rocket() -> _ {
-    println!("{}", metrix_utils::get_header("Ingest").as_str());
-    ingest_queue::process_queue_thread();
+    initialize_utilities();
+    initialize_background_processors();
+    
+    // everything else
     rocket::build()
-        .mount("/", routes![
-            routes::get_metric, 
-            routes::post_metric,
-            routes::get_metric_history,
-            routes::get_metric_series
-            ])
-        .register("/", catchers![general_not_found, default_catcher])
-        .attach(MetrixDatabaseConnection::fairing())
+    .mount("/", routes![
+        routes::get_metric, 
+        routes::post_metric,
+        routes::get_metric_history,
+        routes::get_metric_series
+        ])
+    .register("/", catchers![general_not_found, default_catcher])
+    .attach(MetrixDatabaseConnection::fairing())
+}
+
+fn initialize_utilities() {
+    pretty_env_logger::init();
+    dotenv().ok();
+    println!("{}", metrix_utils::get_header("Ingest").as_str());
+}
+
+fn initialize_background_processors() {
+    InsertQueueManager::process_queue_thread();
 }

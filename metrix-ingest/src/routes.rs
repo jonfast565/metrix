@@ -6,10 +6,8 @@ use crate::ingest_queue::InsertQueueManager;
 #[post("/metric", format = "json", data = "<metric>")]
 pub fn post_metric(metric: Json<MetricInsertRequest<'_>>) {
     let insert = metric.to_metric_insert();
-    let queue_mgr = InsertQueueManager::new();
-    queue_mgr.insert(insert);
-    //conn.run(move |c| metrix_database::insert_metric(&insert, c))
-    //.await;
+    info!("Inserting record into queue manager");
+    InsertQueueManager::insert(insert);
 }
 
 #[get("/metric?<data_point>&<data_group>")]
