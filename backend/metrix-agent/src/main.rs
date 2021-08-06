@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let on_ac_power = device_metrics::get_on_ac_power();
         // device_metrics::get_load_average();
         let uptime = device_metrics::get_uptime();
-        // let boot_time = device_metrics::get_boot_time();
+        let boot_time = device_metrics::get_boot_time();
         let cpu_load = device_metrics::get_cpu_load();
         let memory_stats = device_metrics::get_memory_usage();
         // device_metrics::get_socket_stats();
@@ -40,6 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             memory_stats: memory_stats.unwrap(),
             ac_power: on_ac_power,
             uptime_seconds: uptime.unwrap().as_secs_f32(),
+            boot_time: boot_time.unwrap().timestamp()
         };
         send_metrics(&aggregated_info).await?;
         info!("Done. Use Ctrl + C to quit.");
@@ -160,6 +161,14 @@ async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn st
         "Uptime".to_string(),
         "Seconds".to_string(),
         aggregated_info.uptime_seconds as f64,
+    )
+    .await?;
+
+    send_metric(
+        aggregated_info.sys_info.hostname.clone(),
+        "Boot Time".to_string(),
+        "Unix Time".to_string(),
+        aggregated_info.boot_time as f64,
     )
     .await?;
 

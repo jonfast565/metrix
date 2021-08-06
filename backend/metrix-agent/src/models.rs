@@ -55,4 +55,5 @@ pub struct AggregatedInfo {
     pub memory_stats: MemoryStats,
     pub ac_power: bool,
     pub uptime_seconds: f32,
+    pub boot_time: i64
 }

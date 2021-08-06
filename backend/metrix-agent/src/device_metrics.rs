@@ -6,11 +6,11 @@ use std::thread;
 use std::time::Duration;
 use systemstat::{saturating_sub_bytes, Platform, System};
 
-#[cfg(target_os = "linux")]
-use heim::cpu::os::linux::CpuStatsExt;
-#[cfg(target_os = "windows")]
-use heim::cpu::os::windows::CpuStatsExt;
-use heim::{cpu, Result};
+// #[cfg(target_os = "linux")]
+// use heim::cpu::os::linux::CpuStatsExt;
+// #[cfg(target_os = "windows")]
+// use heim::cpu::os::windows::CpuStatsExt;
+// use heim::{cpu, Result};
 
 pub fn get_mounts() -> Vec<MountPoint> {
     let sys = System::new();
