@@ -1,12 +1,15 @@
 use crate::request_models::MetricInsertRequest;
 use crate::MetrixDatabaseConnection;
 use rocket::serde::json::Json;
+use crate::ingest_queue::InsertQueueManager;
 
 #[post("/metric", format = "json", data = "<metric>")]
-pub async fn post_metric(conn: MetrixDatabaseConnection, metric: Json<MetricInsertRequest<'_>>) {
+pub fn post_metric(metric: Json<MetricInsertRequest<'_>>) {
     let insert = metric.to_metric_insert();
-    conn.run(move |c| metrix_database::insert_metric(&insert, c))
-        .await;
+    let queue_mgr = InsertQueueManager::new();
+    queue_mgr.insert(insert);
+    //conn.run(move |c| metrix_database::insert_metric(&insert, c))
+    //.await;
 }
 
 #[get("/metric?<data_point>&<data_group>")]

@@ -3,6 +3,7 @@ extern crate rocket;
 
 mod request_models;
 mod routes;
+mod ingest_queue;
 
 use rocket::http::Status;
 use rocket::response::{content, status};
@@ -26,6 +27,7 @@ fn default_catcher(status: Status, req: &Request<'_>) -> status::Custom<String> 
 #[launch]
 fn rocket() -> _ {
     println!("{}", metrix_utils::get_header("Ingest").as_str());
+    ingest_queue::process_queue_thread();
     rocket::build()
         .mount("/", routes![
             routes::get_metric, 
