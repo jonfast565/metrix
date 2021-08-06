@@ -5,7 +5,6 @@ use crate::models::AggregatedInfo;
 use ctrlc;
 use std::sync::mpsc::channel;
 use std::time::Duration;
-use tokio::time::sleep;
 
 mod device_metrics;
 mod models;
@@ -80,8 +79,7 @@ async fn send_metrics(aggregated_info: &AggregatedInfo) -> Result<(), Box<dyn st
         "Mount Points".to_string(),
         "Count".to_string(),
         aggregated_info.mount_points.len() as f64,
-    )
-    .await?;
+    ).await?;
 
     for mount_point in &aggregated_info.mount_points {
         send_metric(
