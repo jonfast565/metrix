@@ -61,9 +61,20 @@ pub fn get_metric_series_history_internal(
 pub fn get_metric_groups_internal(conn: &PgConnection) -> Vec<Option<String>> {
     use crate::schema::metric::dsl::*;
     let results = metric
-    .select(data_grouping)
-    .distinct()
-    .load::<Option<String>>(conn)
-    .expect("Error loading groups");
+        .select(data_grouping)
+        .distinct()
+        .load::<Option<String>>(conn)
+        .expect("Error loading groups");
+    results
+}
+
+pub fn get_metric_data_points_by_group(conn: &PgConnection, data_grouping: String) -> Vec<String> {
+    use crate::schema::metric::dsl::*;
+    let results = metric
+        .select(data_point)
+        .filter(data_grouping.eq(data_grouping))
+        .distinct()
+        .load::<String>(conn)
+        .expect("Error loading data points by group");
     results
 }

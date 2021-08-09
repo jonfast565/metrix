@@ -40,7 +40,9 @@ fn rocket() -> _ {
         routes::get_metric, 
         routes::post_metric,
         routes::get_metric_history,
-        routes::get_metric_series
+        routes::get_metric_series,
+        routes::get_metric_data_groupings,
+        routes::get_metric_data_points_for_grouping
         ])
     .register("/", catchers![general_not_found, default_catcher])
     .attach(MetrixDatabaseConnection::fairing())

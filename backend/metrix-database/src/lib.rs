@@ -68,6 +68,15 @@ pub fn get_metric_series_history(
 
 pub fn get_metric_groups(conn: &PgConnection) -> Vec<metrix_models::MetricValue> {
     let results = queries::get_metric_groups_internal(conn);
-    let result = mappers::map_string_results_to_model(results);
+    let result = mappers::map_string_option_to_model(results);
+    result
+}
+
+pub fn get_metric_points_by_group(
+    conn: &PgConnection,
+    data_grouping: String,
+) -> Vec<metrix_models::MetricValue> {
+    let results = queries::get_metric_data_points_by_group(conn, data_grouping);
+    let result = mappers::map_string_to_model(results);
     result
 }
