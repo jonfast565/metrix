@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Shared\Metrix.Dashboard.Web.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
 </Project>
