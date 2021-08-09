@@ -6,9 +6,9 @@ extern crate log;
 
 mod request_models;
 mod routes;
-mod ingest_queue;
+mod insert_queue;
 
-use crate::ingest_queue::InsertQueueManager;
+use crate::insert_queue::InsertQueueManager;
 use dotenv::dotenv;
 use rocket::http::Status;
 use rocket::response::{content, status};
@@ -51,7 +51,7 @@ fn rocket() -> _ {
 fn initialize_utilities() {
     pretty_env_logger::init();
     dotenv().ok();
-    println!("{}", metrix_utils::get_header("Ingest").as_str());
+    println!("{}", metrix_utils::get_header("API").as_str());
 }
 
 fn initialize_background_processors() {
