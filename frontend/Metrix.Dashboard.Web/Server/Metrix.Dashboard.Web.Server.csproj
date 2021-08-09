@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\Metrix.Dashboard.Web.Client.csproj" />
-    <ProjectReference Include="..\Shared\Metrix.Dashboard.Web.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

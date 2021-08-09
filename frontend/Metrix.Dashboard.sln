@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Dashboard.Web.Server", "Metrix.Dashboard.Web\Server\Metrix.Dashboard.Web.Server.csproj", "{D7FA9BFE-D4D4-4AC9-92FF-D50EB645C9C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Dashboard.Web.Server", "Metrix.Dashboard.Web\Server\Metrix.Dashboard.Web.Server.csproj", "{D7FA9BFE-D4D4-4AC9-92FF-D50EB645C9C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Dashboard.Web.Client", "Metrix.Dashboard.Web\Client\Metrix.Dashboard.Web.Client.csproj", "{13E93DF4-B762-420F-A0B2-4FE7622A25CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Dashboard.Web.Client", "Metrix.Dashboard.Web\Client\Metrix.Dashboard.Web.Client.csproj", "{13E93DF4-B762-420F-A0B2-4FE7622A25CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Dashboard.Web.Shared", "Metrix.Dashboard.Web\Shared\Metrix.Dashboard.Web.Shared.csproj", "{3AFA8754-653C-431D-9D5E-4923A30F86EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Models", "Metrix.Models\Metrix.Models.csproj", "{6AB98B3A-231F-449B-A3B0-9D688D04F005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{13E93DF4-B762-420F-A0B2-4FE7622A25CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13E93DF4-B762-420F-A0B2-4FE7622A25CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13E93DF4-B762-420F-A0B2-4FE7622A25CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AFA8754-653C-431D-9D5E-4923A30F86EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AFA8754-653C-431D-9D5E-4923A30F86EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AFA8754-653C-431D-9D5E-4923A30F86EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AFA8754-653C-431D-9D5E-4923A30F86EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
