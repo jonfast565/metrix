@@ -56,3 +56,8 @@ pub struct MetricSizePartial {
     pub data_type: String,
     pub data_value_numeric: BigDecimal,  
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MetricValue {
+    pub value: String
+}

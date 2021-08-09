@@ -1,28 +1,27 @@
 #[macro_use]
 extern crate diesel;
 
-use self::diesel::prelude::*;
 use self::models::*;
-use bigdecimal::BigDecimal;
-use bigdecimal::FromPrimitive;
 
+mod mappers;
 pub mod models;
+mod queries;
 pub mod schema;
 
 use diesel::PgConnection;
 
 pub fn insert_metric(model: &metrix_models::MetricInsert, conn: &PgConnection) {
-    let metric_db = map_insert_model(model);
-    insert_metric_internal(&metric_db, conn);
+    let metric_db = mappers::map_insert_model(model);
+    queries::insert_metric_internal(&metric_db, conn);
 }
 
 pub fn insert_metrics(models: &Vec<metrix_models::MetricInsert>, conn: &PgConnection) {
     let db_models: Vec<MetricInsertDb> = models
         .into_iter()
-        .map(|model| map_insert_model(model))
+        .map(|model| mappers::map_insert_model(model))
         .collect();
 
-    insert_metrics_internal(&db_models, conn);
+    queries::insert_metrics_internal(&db_models, conn);
 }
 
 pub fn get_metrics(
@@ -33,8 +32,8 @@ pub fn get_metrics(
         data_group: Some(model.data_group.as_ref().unwrap().to_string()),
         data_point: model.data_point.to_string(),
     };
-    let results = get_metrics_internal(db_model, conn);
-    let result = map_results(results);
+    let results = queries::get_metrics_internal(db_model, conn);
+    let result = mappers::map_results(results);
     result
 }
 
@@ -47,8 +46,8 @@ pub fn get_metric_history(
         data_point: model.metric_query.data_point.to_string(),
         date: model.date,
     };
-    let results = get_metric_history_internal(db_model, conn);
-    let result = map_results(results);
+    let results = queries::get_metric_history_internal(db_model, conn);
+    let result = mappers::map_results(results);
     result
 }
 
@@ -62,89 +61,13 @@ pub fn get_metric_series_history(
         start_date: model.start_date,
         end_date: model.end_date,
     };
-    let results = get_metric_series_history_internal(db_model, conn);
-    let result = map_results(results);
+    let results = queries::get_metric_series_history_internal(db_model, conn);
+    let result = mappers::map_results(results);
     result
 }
 
-fn insert_metric_internal(model: &MetricInsertDb, conn: &PgConnection) {
-    diesel::insert_into(schema::metric::table)
-        .values(model)
-        .execute(conn)
-        .expect("Error inserting row into database");
-}
-
-fn insert_metrics_internal(models: &Vec<MetricInsertDb>, conn: &PgConnection) {
-    diesel::insert_into(schema::metric::table)
-        .values(models)
-        .execute(conn)
-        .expect("Error inserting rows into database");
-}
-
-fn get_metrics_internal(model: MetricQueryDb, conn: &PgConnection) -> Vec<MetricResultDb> {
-    use schema::metric::dsl::*;
-    let results = metric
-        .filter(data_point.eq(model.data_point))
-        .filter(data_grouping.eq(model.data_group))
-        .limit(1)
-        .order(created_datetime.desc())
-        .load::<MetricResultDb>(conn)
-        .expect("Error loading metric");
-    results
-}
-
-fn get_metric_history_internal(
-    model: MetricPointQueryDb,
-    conn: &PgConnection,
-) -> Vec<MetricResultDb> {
-    use schema::metric::dsl::*;
-    let results = metric
-        .filter(data_point.eq(model.data_point))
-        .filter(data_grouping.eq(model.data_group))
-        .filter(created_datetime.gt(model.date))
-        .order(created_datetime.asc())
-        .load::<MetricResultDb>(conn)
-        .expect("Error loading metric history");
-    results
-}
-
-fn get_metric_series_history_internal(
-    model: MetricRangeQueryDb,
-    conn: &PgConnection,
-) -> Vec<MetricResultDb> {
-    use schema::metric::dsl::*;
-    let results = metric
-        .filter(data_point.eq(model.data_point))
-        .filter(data_grouping.eq(model.data_group))
-        .filter(created_datetime.gt(model.start_date))
-        .filter(created_datetime.lt(model.end_date))
-        .order(created_datetime.asc())
-        .load::<MetricResultDb>(conn)
-        .expect("Error loading metric series history");
-    results
-}
-
-fn map_results(results: Vec<MetricResultDb>) -> Vec<metrix_models::MetricResult> {
-    let result = results
-        .into_iter()
-        .map(|x| metrix_models::MetricResult {
-            id: x.id,
-            data_point: x.data_point,
-            data_type: x.data_type,
-            data_value_numeric: x.data_value_numeric,
-            created_datetime: x.created_datetime,
-            data_grouping: x.data_grouping,
-        })
-        .collect::<Vec<metrix_models::MetricResult>>();
+pub fn get_metric_groups(conn: &PgConnection) -> Vec<metrix_models::MetricValue> {
+    let results = queries::get_metric_groups_internal(conn);
+    let result = mappers::map_string_results_to_model(results);
     result
-}
-
-fn map_insert_model(model: &metrix_models::MetricInsert) -> MetricInsertDb {
-    MetricInsertDb {
-        id: model.id,
-        data_point: model.data_point.to_string(),
-        data_grouping: Some(model.data_group.as_ref().unwrap().to_string()),
-        data_type: model.data_type.to_string(),
-        data_value_numeric: BigDecimal::from_f64(model.data_value_numeric).unwrap(),
-    }
 }
