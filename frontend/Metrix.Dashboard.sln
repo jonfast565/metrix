@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Dashboard.Web.Server
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Dashboard.Web.Client", "Metrix.Dashboard.Web\Client\Metrix.Dashboard.Web.Client.csproj", "{13E93DF4-B762-420F-A0B2-4FE7622A25CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Models", "Metrix.Models\Metrix.Models.csproj", "{6AB98B3A-231F-449B-A3B0-9D688D04F005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Models", "Metrix.Models\Metrix.Models.csproj", "{6AB98B3A-231F-449B-A3B0-9D688D04F005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

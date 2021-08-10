@@ -1,4 +1,4 @@
-use crate::ingest_queue::InsertQueueManager;
+use crate::insert_queue::InsertQueueManager;
 use crate::request_models::MetricInsertRequest;
 use crate::MetrixDatabaseConnection;
 use rocket::serde::json::Json;

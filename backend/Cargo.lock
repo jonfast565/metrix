@@ -1181,6 +1181,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "metrix-api"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "config",
+ "crossbeam",
+ "diesel",
+ "dotenv",
+ "log",
+ "metrix-database",
+ "metrix-models",
+ "metrix-utils",
+ "pretty_env_logger",
+ "rocket",
+ "rocket_sync_db_pools",
+ "uuid",
+]
+
+[[package]]
 name = "metrix-console"
 version = "0.1.0"
 dependencies = [
@@ -1213,25 +1232,6 @@ dependencies = [
  "reqwest",
  "serde 1.0.126",
  "serde_json",
-]
-
-[[package]]
-name = "metrix-ingest"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "config",
- "crossbeam",
- "diesel",
- "dotenv",
- "log",
- "metrix-database",
- "metrix-models",
- "metrix-utils",
- "pretty_env_logger",
- "rocket",
- "rocket_sync_db_pools",
- "uuid",
 ]
 
 [[package]]
