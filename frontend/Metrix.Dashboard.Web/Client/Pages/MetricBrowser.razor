@@ -1,7 +1,65 @@
-﻿<h3>Metric Browser</h3>
+﻿@page "/metric/browser"
+@using Metrix.Models
+@using Metrix.Http
 
+<h3>Metric Browser</h3>
 
+<EditForm EditContext="_editContext">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-control">
+
+                    </div>
+                    <InputSelect class="form-select" @bind-Value="_selectedDataGrouping">
+                        @foreach (var grouping in _dataGroupings)
+                        {
+                            <option value="@grouping">@grouping</option>
+                        }
+                    </InputSelect>
+                    <InputSelect class="form-select" @bind-Value="_selectedDataPoint">
+                        @foreach (var point in _dataPoints)
+                        {
+                            <option value="@point">@point</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="chart-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@inject IJSRuntime _js
+@inject HttpClient _client
+@inject MetrixClient _metrixClient
 
 @code {
+    private List<string> _dataGroupings;
+    private List<string> _dataPoints;
+    private string _selectedDataGrouping;
+    private string _selectedDataPoint;
+    private BlankModel _model;
+    private EditContext _editContext;
+
+    public MetricBrowser()
+    {
+        _model = new BlankModel();
+        _editContext = new EditContext(_model);
+        _dataGroupings = new List<string>();
+        _dataPoints = new List<string>();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dataGroupings = await _metrixClient.GetMetricDataGroupings();
+    }
 
 }

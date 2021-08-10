@@ -7,6 +7,7 @@ extern crate log;
 mod request_models;
 mod routes;
 mod insert_queue;
+mod cors;
 
 use crate::insert_queue::InsertQueueManager;
 use dotenv::dotenv;
@@ -36,6 +37,7 @@ fn rocket() -> _ {
     
     // everything else
     rocket::build()
+    .attach(cors::CORS)
     .mount("/", routes![
         routes::get_metric, 
         routes::post_metric,

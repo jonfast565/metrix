@@ -1,2 +1,11 @@
 ﻿@page "/"
 
+@inject NavigationManager NavManager
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        NavManager.NavigateTo("/metric/browser");
+    }
+}

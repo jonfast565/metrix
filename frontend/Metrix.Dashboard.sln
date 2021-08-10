@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Dashboard.Web.Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrix.Models", "Metrix.Models\Metrix.Models.csproj", "{6AB98B3A-231F-449B-A3B0-9D688D04F005}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Http", "Metrix.Http\Metrix.Http.csproj", "{7532266E-1422-4573-AAFF-D79EC3FDFA46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrix.Utils", "Metrix.Utils\Metrix.Utils.csproj", "{F0A52A1D-523C-4C88-A795-72E3E4F3EBE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AB98B3A-231F-449B-A3B0-9D688D04F005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7532266E-1422-4573-AAFF-D79EC3FDFA46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7532266E-1422-4573-AAFF-D79EC3FDFA46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7532266E-1422-4573-AAFF-D79EC3FDFA46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7532266E-1422-4573-AAFF-D79EC3FDFA46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A52A1D-523C-4C88-A795-72E3E4F3EBE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A52A1D-523C-4C88-A795-72E3E4F3EBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A52A1D-523C-4C88-A795-72E3E4F3EBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A52A1D-523C-4C88-A795-72E3E4F3EBE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

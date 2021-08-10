@@ -10,4 +10,9 @@
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Metrix.Http\Metrix.Http.csproj" />
+    <ProjectReference Include="..\..\Metrix.Models\Metrix.Models.csproj" />
+  </ItemGroup>
+
 </Project>
