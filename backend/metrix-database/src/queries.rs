@@ -68,11 +68,11 @@ pub fn get_metric_groups_internal(conn: &PgConnection) -> Vec<Option<String>> {
     results
 }
 
-pub fn get_metric_data_points_by_group(conn: &PgConnection, data_grouping: String) -> Vec<String> {
+pub fn get_metric_data_points_by_group(conn: &PgConnection, data_grouping_var: String) -> Vec<String> {
     use crate::schema::metric::dsl::*;
     let results = metric
         .select(data_point)
-        .filter(data_grouping.eq(data_grouping))
+        .filter(data_grouping.eq(data_grouping_var))
         .distinct()
         .load::<String>(conn)
         .expect("Error loading data points by group");

@@ -2,24 +2,12 @@ use crate::models::*;
 use bigdecimal::BigDecimal;
 use bigdecimal::FromPrimitive;
 
-pub fn map_string_option_to_model(result: Vec<Option<String>>) -> Vec<metrix_models::MetricValue> {
+pub fn map_string_option_to_model(result: Vec<Option<String>>) -> Vec<String> {
     let results = result
         .into_iter()
-        .map(|x| match x {
-            Some(x) => Some(metrix_models::MetricValue { value: x }),
-            None => None,
-        })
         .filter(|x| x.is_some())
         .map(|x| x.unwrap())
-        .collect::<Vec<metrix_models::MetricValue>>();
-    results
-}
-
-pub fn map_string_to_model(result: Vec<String>) -> Vec<metrix_models::MetricValue> {
-    let results = result
-        .into_iter()
-        .map(|x| metrix_models::MetricValue { value: x })
-        .collect::<Vec<metrix_models::MetricValue>>();
+        .collect::<Vec<String>>();
     results
 }
 

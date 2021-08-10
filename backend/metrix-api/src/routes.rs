@@ -57,7 +57,7 @@ pub async fn get_metric_series(
 #[get("/metric/data-groupings")]
 pub async fn get_metric_data_groupings(
     conn: MetrixDatabaseConnection,
-) -> Json<Vec<metrix_models::MetricValue>> {
+) -> Json<Vec<String>> {
     let result = conn
         .run(move |c| metrix_database::get_metric_groups(c))
         .await;
@@ -68,7 +68,7 @@ pub async fn get_metric_data_groupings(
 pub async fn get_metric_data_points_for_grouping(
     conn: MetrixDatabaseConnection,
     data_grouping: &str,
-) -> Json<Vec<metrix_models::MetricValue>> {
+) -> Json<Vec<String>> {
     let grouping: String = data_grouping.to_string();
     let result = conn
         .run(move |c| metrix_database::get_metric_points_by_group(c, grouping))
