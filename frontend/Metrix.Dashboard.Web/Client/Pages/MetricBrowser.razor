@@ -2,6 +2,8 @@
 @using Metrix.Models
 @using Metrix.Http
 @using Metrix.Models.Frontend
+@using System.Timers
+@implements IAsyncDisposable
 
 <h3>Metric Browser</h3>
 
@@ -43,7 +45,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5>@_model.SelectedDataGroup - @_model.SelectedDataPoint</h5>
-                    <div class="chart-body"></div>
+                    <canvas id="chart-body" width="400" height="400"></canvas>
                 </div>
             </div>
         </div>
@@ -59,6 +61,9 @@
     private List<string> _dataPoints;
     private MetricBrowserModel _model;
     private EditContext _editContext;
+    private List<MetricResult> _graphData;
+    private IJSObjectReference _chartModule;
+    private Timer _updateTimer;
 
     public MetricBrowser()
     {
@@ -66,6 +71,23 @@
         _editContext = new EditContext(_model);
         _dataGroupings = new List<string>();
         _dataPoints = new List<string>();
+        _graphData = new List<MetricResult>();
+        _updateTimer = new Timer
+        {
+            AutoReset = true,
+            Interval = 1000
+        };
+        _updateTimer.Elapsed += async (sender, e) => { await LoadGraph(); };
+        _updateTimer.Enabled = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _chartModule = await _js.InvokeAsync<IJSObjectReference>("import",
+            "./js/metric-browser/chart.js");
+        }
     }
 
     protected override async Task OnInitializedAsync()
@@ -85,7 +107,7 @@
 
     private async Task LoadGraph()
     {
-        await _metrixClient.GetMetricSeries(new MetricRangeQuery
+        var series = await _metrixClient.GetMetricSeries(new MetricRangeQuery
         {
             MetricQuery = new MetricQuery
             {
@@ -107,5 +129,16 @@
                 _model.EndTime.Value.Minute,
                 _model.EndTime.Value.Second)
         });
+        _graphData = series;
+
+        await _chartModule.InvokeVoidAsync("drawChart", series);
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (_chartModule is not null)
+        {
+            await _chartModule.DisposeAsync();
+        }
     }
 }
