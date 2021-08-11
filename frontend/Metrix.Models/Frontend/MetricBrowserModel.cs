@@ -10,9 +10,9 @@ namespace Metrix.Models.Frontend
     {
         public string SelectedDataPoint { get; set; }
         public string SelectedDataGroup { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndDate { get; set; }
-        public DateTime? EndTime { get; set; }
+        public DateTime? StartDate { get; set; } = DateTime.Now.ToLocalTime() - TimeSpan.FromHours(1);
+        public DateTime? StartTime { get; set; } = DateTime.Now.ToLocalTime() - TimeSpan.FromHours(1);
+        public DateTime? EndDate { get; set; } = DateTime.Now.ToLocalTime();
+        public DateTime? EndTime { get; set; } = DateTime.Now.ToLocalTime();
     }
 }

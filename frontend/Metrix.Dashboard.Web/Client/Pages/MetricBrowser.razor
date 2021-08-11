@@ -42,6 +42,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
+                    <h5>@_model.SelectedDataGroup - @_model.SelectedDataPoint</h5>
                     <div class="chart-body"></div>
                 </div>
             </div>
@@ -72,11 +73,39 @@
         _dataGroupings = await _metrixClient.GetMetricDataGroupings();
         _model.SelectedDataGroup = _dataGroupings[0];
         _dataPoints = await _metrixClient.GetMetricDataPointsForGrouping(_model.SelectedDataGroup);
+        _model.SelectedDataPoint = _dataPoints[0];
+        await LoadGraph();
     }
 
     private async Task LoadDataPoints(string value)
     {
         _model.SelectedDataGroup = value;
         _dataPoints = await _metrixClient.GetMetricDataPointsForGrouping(_model.SelectedDataGroup);
+    }
+
+    private async Task LoadGraph()
+    {
+        await _metrixClient.GetMetricSeries(new MetricRangeQuery
+        {
+            MetricQuery = new MetricQuery
+            {
+                DataGroup = _model.SelectedDataGroup,
+                DataPoint = _model.SelectedDataPoint
+            },
+            StartDate = new DateTime(
+                _model.StartDate.Value.Year,
+                _model.StartDate.Value.Month,
+                _model.StartDate.Value.Day,
+                _model.StartTime.Value.Hour,
+                _model.StartTime.Value.Minute,
+                _model.StartTime.Value.Second),
+            EndDate = new DateTime(
+                _model.EndDate.Value.Year,
+                _model.EndDate.Value.Month,
+                _model.EndDate.Value.Day,
+                _model.EndTime.Value.Hour,
+                _model.EndTime.Value.Minute,
+                _model.EndTime.Value.Second)
+        });
     }
 }
