@@ -1,6 +1,7 @@
 ﻿@page "/metric/browser"
 @using Metrix.Models
 @using Metrix.Http
+@using Metrix.Models.Frontend
 
 <h3>Metric Browser</h3>
 
@@ -9,21 +10,32 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <div class="form-control">
-
-                    </div>
-                    <InputSelect class="form-select" @bind-Value="_selectedDataGrouping">
+                    <h5 class="mb-2">Options</h5>
+                    <InputSelect class="form-select mb-2"
+                                 ValueChanged="@((string value) => LoadDataPoints(value))"
+                                 ValueExpression="@(() => _model.SelectedDataGroup)"
+                                 Value="@_model.SelectedDataGroup">
                         @foreach (var grouping in _dataGroupings)
                         {
                             <option value="@grouping">@grouping</option>
                         }
                     </InputSelect>
-                    <InputSelect class="form-select" @bind-Value="_selectedDataPoint">
+                    <InputSelect class="form-select mb-2" @bind-Value="_model.SelectedDataPoint">
                         @foreach (var point in _dataPoints)
                         {
                             <option value="@point">@point</option>
                         }
                     </InputSelect>
+                    <div class="mb-2">
+                        <label>Start Date</label>
+                        <input class="form-control mb-sm-1" type="date" @bind="_model.StartDate" />
+                        <input class="form-control mb-sm-1" type="time" @bind="_model.StartTime" />
+                    </div>
+                    <div class="mb-2">
+                        <label>End Date</label>
+                        <input class="form-control mb-sm-1" type="date" @bind="_model.EndDate" />
+                        <input class="form-control mb-sm-1" type="time" @bind="_model.EndTime" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,14 +56,12 @@
 @code {
     private List<string> _dataGroupings;
     private List<string> _dataPoints;
-    private string _selectedDataGrouping;
-    private string _selectedDataPoint;
     private MetricBrowserModel _model;
     private EditContext _editContext;
 
     public MetricBrowser()
     {
-        _model = new BlankModel();
+        _model = new MetricBrowserModel();
         _editContext = new EditContext(_model);
         _dataGroupings = new List<string>();
         _dataPoints = new List<string>();
@@ -60,6 +70,13 @@
     protected override async Task OnInitializedAsync()
     {
         _dataGroupings = await _metrixClient.GetMetricDataGroupings();
+        _model.SelectedDataGroup = _dataGroupings[0];
+        _dataPoints = await _metrixClient.GetMetricDataPointsForGrouping(_model.SelectedDataGroup);
     }
 
+    private async Task LoadDataPoints(string value)
+    {
+        _model.SelectedDataGroup = value;
+        _dataPoints = await _metrixClient.GetMetricDataPointsForGrouping(_model.SelectedDataGroup);
+    }
 }

@@ -96,7 +96,7 @@ namespace Metrix.Http
         {
             var ps = new Dictionary<string, string>
             {
-                { "data_grouping", grouping }
+                { "data_grouping", grouping ?? string.Empty }
             };
             var result = await _client.GetAsync(QueryHelpers.AddQueryString($"{BASE_URL}/metric/data-points", ps),
                 _cts.Token);
