@@ -8,10 +8,10 @@
 <h3>Metric Browser</h3>
 
 <EditForm EditContext="_editContext">
-    <div class="row">
-        <div class="col-lg-4">
+    <div class="grid-x">
+        <div class="cell medium-6 large-4">
             <div class="card">
-                <div class="card-body">
+                <div class="card-section">
                     <h5 class="mb-2">Options</h5>
                     <InputSelect class="form-select mb-2"
                                  ValueChanged="@((string value) => LoadDataPoints(value))"
@@ -51,9 +51,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-8">
+        <div class="cell medium-6 large-8">
             <div class="card">
-                <div class="card-body">
+                <div class="card-section">
                     <h5>@_model.SelectedDataGroup - @_model.SelectedDataPoint</h5>
                     <canvas id="chart-body" width="400" height="400"></canvas>
                 </div>
@@ -107,6 +107,7 @@
         {
             _chartModule = await _js.InvokeAsync<IJSObjectReference>("import",
             "./js/metric-browser/chart.js");
+            await _chartModule.InvokeVoidAsync("initializeChart");
         }
     }
 
