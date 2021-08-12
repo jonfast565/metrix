@@ -3,7 +3,7 @@
 function initializeChart() {
     Chart.overrides.line.spanGaps = true;
     const chartElement = document.getElementById('chart-body');
-    chartElement.height = 200;
+    chartElement.height = 175;
     const ctx = chartElement.getContext('2d');
     window.chart = new Chart(ctx, {
         type: 'line',
