@@ -298,16 +298,15 @@ fn headers() {
 }
 
 fn set_ctrl_c_handler(tx: Sender<()>) {
-    ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))
+    ctrlc::set_handler(move || tx.send(())
+        .expect("Could not send signal on channel."))
         .expect("Error setting Ctrl-C handler");
 }
 
 fn wait_on_ctrl_c(rx: Receiver<()>) -> bool {
-    info!("Done. Use Ctrl + C to quit.");
-    info!("1 seconds until next run.");
-    match rx.recv_timeout(Duration::from_secs(5)) {
+    match rx.recv_timeout(Duration::from_secs(1)) {
         Ok(_) => {
-            info!("Ctrl + C invoked. Application will quit now");
+            info!("Application will quit now");
             true
         }
         _ => false,
