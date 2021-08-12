@@ -19,10 +19,11 @@ namespace Metrix.Models.Frontend
         public void RefreshEndTime()
         {
             var now = DateTime.Now.ToUniversalTime();
+            var distanceBetweenStartAndEnd = EndTime - StartTime;
             EndDate = now;
             EndTime = now;
-            StartDate = now - TimeSpan.FromHours(1);
-            StartTime = now - TimeSpan.FromHours(1);
+            StartDate = now - distanceBetweenStartAndEnd;
+            StartTime = now - distanceBetweenStartAndEnd;
         }
     }
 }
