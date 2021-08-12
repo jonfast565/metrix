@@ -2,7 +2,9 @@
 
 function initializeChart() {
     Chart.overrides.line.spanGaps = true;
-    const ctx = document.getElementById('chart-body').getContext('2d');
+    const chartElement = document.getElementById('chart-body');
+    chartElement.height = 200;
+    const ctx = chartElement.getContext('2d');
     window.chart = new Chart(ctx, {
         type: 'line',
         data: {

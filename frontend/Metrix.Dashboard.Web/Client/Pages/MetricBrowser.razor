@@ -14,7 +14,7 @@
                 <div class="card-section">
                     <h5 class="mb-2">Options</h5>
                     <InputSelect class="form-select mb-2"
-                                 ValueChanged="@((string value) => LoadDataPoints(value))"
+                                 ValueChanged="@((string value) => OnDataGroupChange(value))"
                                  ValueExpression="@(() => _model.SelectedDataGroup)"
                                  Value="@_model.SelectedDataGroup">
                         @foreach (var grouping in _dataGroupings)
@@ -22,7 +22,10 @@
                             <option value="@grouping">@grouping</option>
                         }
                     </InputSelect>
-                    <InputSelect class="form-select mb-2" @bind-Value="_model.SelectedDataPoint">
+                    <InputSelect class="form-select mb-2" 
+                                 ValueChanged="@((string value) => OnDataPointChange(value))"
+                                 ValueExpression="@(() => _model.SelectedDataPoint)"
+                                 Value="@_model.SelectedDataPoint">
                         @foreach (var point in _dataPoints)
                         {
                             <option value="@point">@point</option>
@@ -55,7 +58,7 @@
             <div class="card">
                 <div class="card-section">
                     <h5>@_model.SelectedDataGroup - @_model.SelectedDataPoint</h5>
-                    <canvas id="chart-body" width="400" height="400"></canvas>
+                    <canvas id="chart-body"></canvas>
                 </div>
             </div>
         </div>
@@ -85,7 +88,7 @@
         _updateTimer = new Timer
         {
             AutoReset = true,
-            Interval = 1000
+            Interval = 10000
         };
         _updateTimer.Elapsed += OnTimerElapsed;
         _updateTimer.Enabled = true;
@@ -108,6 +111,7 @@
             _chartModule = await _js.InvokeAsync<IJSObjectReference>("import",
             "./js/metric-browser/chart.js");
             await _chartModule.InvokeVoidAsync("initializeChart");
+            await LoadGraph();
         }
     }
 
@@ -119,10 +123,17 @@
         _model.SelectedDataPoint = _dataPoints[0];
     }
 
-    private async Task LoadDataPoints(string value)
+    private async Task OnDataGroupChange(string value)
     {
         _model.SelectedDataGroup = value;
         _dataPoints = await _metrixClient.GetMetricDataPointsForGrouping(_model.SelectedDataGroup);
+        await LoadGraph();
+    }
+
+    private async Task OnDataPointChange(string value)
+    {
+        _model.SelectedDataPoint = value;
+        await LoadGraph();
     }
 
     private async Task LoadGraph()
