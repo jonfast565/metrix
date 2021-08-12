@@ -1,6 +1,7 @@
 
 use systemstat::ByteSize;
 
+#[derive(Clone)]
 pub struct SystemInformation {
     pub system: String, 
     pub release: String, 

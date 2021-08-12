@@ -1157,6 +1157,7 @@ name = "metrix-agent"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "crossbeam",
  "ctrlc",
  "futures",
  "heim",
