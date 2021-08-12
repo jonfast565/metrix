@@ -30,13 +30,23 @@
                     </InputSelect>
                     <div class="mb-2">
                         <label>Start Date</label>
-                        <input class="form-control mb-sm-1" type="date" @bind="_model.StartDate" />
+                        <InputDate class="form-control mb-sm-1" @bind-Value="_model.StartDate"></InputDate>
                         <input class="form-control mb-sm-1" type="time" @bind="_model.StartTime" />
                     </div>
                     <div class="mb-2">
                         <label>End Date</label>
-                        <input class="form-control mb-sm-1" type="date" @bind="_model.EndDate" />
+                        <InputDate class="form-control mb-sm-1" @bind-Value="_model.EndDate"></InputDate>
                         <input class="form-control mb-sm-1" type="time" @bind="_model.EndTime" />
+                    </div>
+                    <div class="mb-2">
+                        <fieldset>
+                            <label>Synchronize End Time</label>
+                            <InputCheckbox class="form-control mb-sm-1" @bind-Value="_model.SyncEndTime"></InputCheckbox>
+                        </fieldset>
+                    </div>
+                    <div class="mb-2">
+                        <label>Refresh Interval (ms)</label>
+                        <InputNumber class="form-control mb-sm-1" @bind-Value="_updateTimer.Interval"></InputNumber>
                     </div>
                 </div>
             </div>
@@ -77,8 +87,18 @@
             AutoReset = true,
             Interval = 1000
         };
-        _updateTimer.Elapsed += async (sender, e) => { await LoadGraph(); };
+        _updateTimer.Elapsed += OnTimerElapsed;
         _updateTimer.Enabled = true;
+    }
+
+    protected async void OnTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        if (_model.SyncEndTime)
+        {
+            _model.RefreshEndTime();
+        }
+        await LoadGraph();
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -96,7 +116,6 @@
         _model.SelectedDataGroup = _dataGroupings[0];
         _dataPoints = await _metrixClient.GetMetricDataPointsForGrouping(_model.SelectedDataGroup);
         _model.SelectedDataPoint = _dataPoints[0];
-        await LoadGraph();
     }
 
     private async Task LoadDataPoints(string value)
@@ -109,11 +128,11 @@
     {
         if (_model.EndDate != null && _model.StartDate != null && _model.EndTime != null && _model.StartTime != null)
         {
-            var series = await _metrixClient.GetMetricSeries(new MetricRangeQuery
+            var query = new MetricRangeQuery
             {
                 MetricQuery = new MetricQuery
                 {
-                    DataGroup = _model.SelectedDataGroup,
+                    DataGrouping = _model.SelectedDataGroup,
                     DataPoint = _model.SelectedDataPoint
                 },
                 StartDate = new DateTime(
@@ -130,7 +149,9 @@
                     _model.EndTime.Value.Hour,
                     _model.EndTime.Value.Minute,
                     _model.EndTime.Value.Second)
-            });
+            };
+
+            var series = await _metrixClient.GetMetricSeries(query);
             _graphData = series;
 
             await _chartModule.InvokeVoidAsync("drawChart", series);

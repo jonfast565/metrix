@@ -13,7 +13,7 @@ namespace Metrix.Http
     public class MetrixClient
     {
         private static readonly string BaseUrl = "http://localhost:8000";
-        private static readonly string FormatString = "yyyy-MM-ddThh:mm:ss";
+        private static readonly string FormatString = "yyyy-MM-ddTHH:mm:ss";
         private readonly HttpClient _client;
         private readonly CancellationTokenSource _cts;
 
@@ -34,7 +34,7 @@ namespace Metrix.Http
             var ps = new Dictionary<string, string>
             {
                 { "data_point", query.DataPoint },
-                { "data_group", query.DataGroup }
+                { "data_group", query.DataGrouping }
             };
             var result = await _client.GetAsync(QueryHelpers.AddQueryString($"{BaseUrl}/metric", ps), _cts.Token);
             var body = await result.Content.ReadAsStringAsync(_cts.Token);
@@ -50,7 +50,7 @@ namespace Metrix.Http
             var ps = new Dictionary<string, string>
             {
                 { "data_point", query.MetricQuery.DataPoint },
-                { "data_group", query.MetricQuery.DataGroup },
+                { "data_group", query.MetricQuery.DataGrouping },
                 { "date", query.Date.ToString(FormatString) }
             };
             var result = await _client.GetAsync(QueryHelpers.AddQueryString($"{BaseUrl}/metric/history", ps),
@@ -68,11 +68,10 @@ namespace Metrix.Http
             var ps = new Dictionary<string, string>
             {
                 { "data_point", query.MetricQuery.DataPoint },
-                { "data_group", query.MetricQuery.DataGroup },
+                { "data_group", query.MetricQuery.DataGrouping },
                 { "start_date", query.StartDate.ToString(FormatString) },
-                { "end_date", query.StartDate.ToString(FormatString) }
+                { "end_date", query.EndDate.ToString(FormatString) }
             };
-            Console.WriteLine(JsonConvert.SerializeObject(ps));
             var result = await _client.GetAsync(QueryHelpers.AddQueryString($"{BaseUrl}/metric/series", ps),
                 _cts.Token);
             var body = await result.Content.ReadAsStringAsync(_cts.Token);

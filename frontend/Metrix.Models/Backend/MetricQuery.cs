@@ -3,6 +3,6 @@
     public class MetricQuery
     {
         public string DataPoint { get; set; }
-        public string DataGroup { get; set; }
+        public string DataGrouping { get; set; }
     }
 }
