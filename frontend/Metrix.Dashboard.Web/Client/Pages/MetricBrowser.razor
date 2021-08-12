@@ -107,31 +107,34 @@
 
     private async Task LoadGraph()
     {
-        var series = await _metrixClient.GetMetricSeries(new MetricRangeQuery
+        if (_model.EndDate != null && _model.StartDate != null && _model.EndTime != null && _model.StartTime != null)
         {
-            MetricQuery = new MetricQuery
+            var series = await _metrixClient.GetMetricSeries(new MetricRangeQuery
             {
-                DataGroup = _model.SelectedDataGroup,
-                DataPoint = _model.SelectedDataPoint
-            },
-            StartDate = new DateTime(
-                _model.StartDate.Value.Year,
-                _model.StartDate.Value.Month,
-                _model.StartDate.Value.Day,
-                _model.StartTime.Value.Hour,
-                _model.StartTime.Value.Minute,
-                _model.StartTime.Value.Second),
-            EndDate = new DateTime(
-                _model.EndDate.Value.Year,
-                _model.EndDate.Value.Month,
-                _model.EndDate.Value.Day,
-                _model.EndTime.Value.Hour,
-                _model.EndTime.Value.Minute,
-                _model.EndTime.Value.Second)
-        });
-        _graphData = series;
+                MetricQuery = new MetricQuery
+                {
+                    DataGroup = _model.SelectedDataGroup,
+                    DataPoint = _model.SelectedDataPoint
+                },
+                StartDate = new DateTime(
+                    _model.StartDate.Value.Year,
+                    _model.StartDate.Value.Month,
+                    _model.StartDate.Value.Day,
+                    _model.StartTime.Value.Hour,
+                    _model.StartTime.Value.Minute,
+                    _model.StartTime.Value.Second),
+                EndDate = new DateTime(
+                    _model.EndDate.Value.Year,
+                    _model.EndDate.Value.Month,
+                    _model.EndDate.Value.Day,
+                    _model.EndTime.Value.Hour,
+                    _model.EndTime.Value.Minute,
+                    _model.EndTime.Value.Second)
+            });
+            _graphData = series;
 
-        await _chartModule.InvokeVoidAsync("drawChart", series);
+            await _chartModule.InvokeVoidAsync("drawChart", series);
+        }
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync()
