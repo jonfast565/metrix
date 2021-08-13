@@ -237,6 +237,11 @@ async fn cpu_watcher(
     rx: Receiver<()>,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    const LIMIT: usize = 60;
+    let mut average_cpu_user = Vec::<f64>::new();
+    let mut average_cpu_system = Vec::<f64>::new();
+    let mut average_cpu_idle = Vec::<f64>::new();
+
     loop {
         let cpu_load = device_metrics::get_cpu_load().unwrap();
         send_metrics::send_metric(
@@ -244,6 +249,19 @@ async fn cpu_watcher(
             "CPU Load (User)".to_string(),
             "Percentage".to_string(),
             cpu_load.user as f64,
+        )
+        .await?;
+
+        average_cpu_user.push(cpu_load.user.into());
+        if average_cpu_user.len() > LIMIT {
+            average_cpu_user.remove(0);
+        }
+
+        send_metrics::send_metric(
+            sys_info.hostname.clone(),
+            "CPU Load Average (User)".to_string(),
+            "Percentage".to_string(),
+            metrix_utils::math::average(&average_cpu_user),
         )
         .await?;
 
@@ -255,11 +273,37 @@ async fn cpu_watcher(
         )
         .await?;
 
+        average_cpu_system.push(cpu_load.system.into());
+        if average_cpu_system.len() > LIMIT {
+            average_cpu_system.remove(0);
+        }
+
+        send_metrics::send_metric(
+            sys_info.hostname.clone(),
+            "CPU Load Average (System)".to_string(),
+            "Percentage".to_string(),
+            metrix_utils::math::average(&average_cpu_system),
+        )
+        .await?;
+
         send_metrics::send_metric(
             sys_info.hostname.clone(),
             "CPU Idle".to_string(),
             "Percentage".to_string(),
             cpu_load.idle as f64,
+        )
+        .await?;
+
+        average_cpu_idle.push(cpu_load.idle.into());
+        if average_cpu_idle.len() > LIMIT {
+            average_cpu_idle.remove(0);
+        }
+
+        send_metrics::send_metric(
+            sys_info.hostname.clone(),
+            "CPU Idle Average".to_string(),
+            "Percentage".to_string(),
+            metrix_utils::math::average(&average_cpu_idle),
         )
         .await?;
 

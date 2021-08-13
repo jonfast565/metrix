@@ -1,5 +1,6 @@
 pub mod time;
 pub mod envs;
+pub mod math;
 
 pub fn get_header(application_name: &str) -> String {
     let version = env!("CARGO_PKG_VERSION");
