@@ -4,7 +4,6 @@ extern crate log;
 use crate::models::SystemInformation;
 use crossbeam::channel::{unbounded, Receiver};
 use ctrlc;
-use std::time::Duration;
 use tokio::try_join;
 use tokio_util::sync::CancellationToken;
 
@@ -21,7 +20,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .expect("Error setting Ctrl-C handler");
 
     let host_information = device_metrics::get_host_information().await?;
-
     let canceller = CancellationToken::new();
 
     let cancel_mount_point = canceller.clone();
@@ -73,8 +71,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     });
 
     wait_on_ctrl_c_block(rx);
-    info!("Ctrl + C finished");
-    
     canceller.cancel();
 
     try_join!(
@@ -122,8 +118,8 @@ async fn mount_point_watcher(
             .await?;
         }
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -143,8 +139,8 @@ async fn networks_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -164,8 +160,8 @@ async fn battery_life_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -188,8 +184,8 @@ async fn ac_power_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -209,8 +205,8 @@ async fn uptime_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -230,8 +226,8 @@ async fn boot_time_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -311,8 +307,8 @@ async fn cpu_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -340,8 +336,8 @@ async fn memory_watcher(
         )
         .await?;
 
-        match !rx.is_cancelled() {
-            true => (),
+        match rx.is_cancelled() {
+            true => return Ok(()),
             false => continue,
         };
     }
@@ -350,16 +346,6 @@ async fn memory_watcher(
 fn headers() {
     pretty_env_logger::init();
     println!("{}", metrix_utils::get_header("Agent"));
-}
-
-fn wait_on_ctrl_c(rx: Receiver<()>) -> bool {
-    match rx.recv_timeout(Duration::from_secs(1)) {
-        Ok(_) => {
-            info!("Application will quit now");
-            true
-        }
-        _ => false,
-    }
 }
 
 fn wait_on_ctrl_c_block(rx: Receiver<()>) -> bool {
