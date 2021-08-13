@@ -1,4 +1,4 @@
-﻿namespace Metrix.Models
+﻿namespace Metrix.Models.Backend
 {
     public class MetricValue
     {

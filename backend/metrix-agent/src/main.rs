@@ -23,54 +23,55 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let mount_point_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         mount_point_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let networks_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         networks_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let battery_life_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         battery_life_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let ac_power_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         ac_power_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let uptime_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         uptime_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let boot_time_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         boot_time_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let cpu_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         cpu_watcher(cancel, hi).await.expect("");
     });
 
     let cancel = rx.clone();
     let hi = host_information.clone();
-    let memory_watcher_task = tokio::spawn(async move {
+    tokio::spawn(async move {
         memory_watcher(cancel, hi).await.expect("");
     });
 
     wait_on_ctrl_c_block(rx);
     info!("Ctrl + C finished");
+    /*
     try_join!(
         mount_point_watcher_task,
         networks_watcher_task,
@@ -81,6 +82,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         cpu_watcher_task,
         memory_watcher_task
     )?;
+    */
 
     Ok(())
 }

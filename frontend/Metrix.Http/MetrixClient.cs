@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Metrix.Models;
+using Metrix.Models.Backend;
 using Metrix.Utils;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
