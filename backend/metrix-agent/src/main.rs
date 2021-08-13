@@ -2,10 +2,11 @@
 extern crate log;
 
 use crate::models::SystemInformation;
-use crossbeam::channel::{unbounded, Receiver, Sender};
+use crossbeam::channel::{unbounded, Receiver};
 use ctrlc;
 use std::time::Duration;
 use tokio::try_join;
+use tokio_util::sync::CancellationToken;
 
 mod device_metrics;
 mod models;
@@ -21,57 +22,61 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let host_information = device_metrics::get_host_information().await?;
 
-    let cancel = rx.clone();
+    let canceller = CancellationToken::new();
+
+    let cancel_mount_point = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        mount_point_watcher(cancel, hi).await.expect("");
+    let mount_point_watcher_task = tokio::spawn(async move {
+        mount_point_watcher(cancel_mount_point.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_network = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        networks_watcher(cancel, hi).await.expect("");
+    let networks_watcher_task = tokio::spawn(async move {
+        networks_watcher(cancel_network.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_battery_life = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        battery_life_watcher(cancel, hi).await.expect("");
+    let battery_life_watcher_task = tokio::spawn(async move {
+        battery_life_watcher(cancel_battery_life.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_ac_power = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        ac_power_watcher(cancel, hi).await.expect("");
+    let ac_power_watcher_task = tokio::spawn(async move {
+        ac_power_watcher(cancel_ac_power.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_uptime = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        uptime_watcher(cancel, hi).await.expect("");
+    let uptime_watcher_task = tokio::spawn(async move {
+        uptime_watcher(cancel_uptime.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_boot_time = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        boot_time_watcher(cancel, hi).await.expect("");
+    let boot_time_watcher_task = tokio::spawn(async move {
+        boot_time_watcher(cancel_boot_time.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_cpu = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        cpu_watcher(cancel, hi).await.expect("");
+    let cpu_watcher_task = tokio::spawn(async move {
+        cpu_watcher(cancel_cpu.child_token(), hi).await.expect("");
     });
 
-    let cancel = rx.clone();
+    let cancel_memory = canceller.clone();
     let hi = host_information.clone();
-    tokio::spawn(async move {
-        memory_watcher(cancel, hi).await.expect("");
+    let memory_watcher_task = tokio::spawn(async move {
+        memory_watcher(cancel_memory.child_token(), hi).await.expect("");
     });
 
     wait_on_ctrl_c_block(rx);
     info!("Ctrl + C finished");
-    /*
+    
+    canceller.cancel();
+
     try_join!(
         mount_point_watcher_task,
         networks_watcher_task,
@@ -82,13 +87,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         cpu_watcher_task,
         memory_watcher_task
     )?;
-    */
 
     Ok(())
 }
 
 async fn mount_point_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -118,7 +122,7 @@ async fn mount_point_watcher(
             .await?;
         }
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -126,7 +130,7 @@ async fn mount_point_watcher(
 }
 
 async fn networks_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -139,7 +143,7 @@ async fn networks_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -147,7 +151,7 @@ async fn networks_watcher(
 }
 
 async fn battery_life_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -160,7 +164,7 @@ async fn battery_life_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -168,7 +172,7 @@ async fn battery_life_watcher(
 }
 
 async fn ac_power_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -184,7 +188,7 @@ async fn ac_power_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -192,7 +196,7 @@ async fn ac_power_watcher(
 }
 
 async fn uptime_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -205,7 +209,7 @@ async fn uptime_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -213,7 +217,7 @@ async fn uptime_watcher(
 }
 
 async fn boot_time_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -226,7 +230,7 @@ async fn boot_time_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -234,7 +238,7 @@ async fn boot_time_watcher(
 }
 
 async fn cpu_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     const LIMIT: usize = 60;
@@ -307,7 +311,7 @@ async fn cpu_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };
@@ -315,7 +319,7 @@ async fn cpu_watcher(
 }
 
 async fn memory_watcher(
-    rx: Receiver<()>,
+    rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     loop {
@@ -336,7 +340,7 @@ async fn memory_watcher(
         )
         .await?;
 
-        match wait_on_ctrl_c(rx.clone()) {
+        match !rx.is_cancelled() {
             true => (),
             false => continue,
         };

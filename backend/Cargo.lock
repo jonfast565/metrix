@@ -1169,6 +1169,7 @@ dependencies = [
  "sys-info",
  "systemstat",
  "tokio",
+ "tokio-util",
 ]
 
 [[package]]

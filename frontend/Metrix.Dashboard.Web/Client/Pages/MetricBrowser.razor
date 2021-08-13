@@ -13,8 +13,8 @@
         <div class="cell medium-6 large-4">
             <div class="card">
                 <div class="card-section">
-                    <h5 class="mb-2">Options</h5>
-                    <InputSelect class="form-select mb-2"
+                    <h5>Options</h5>
+                    <InputSelect
                                  ValueChanged="@((string value) => OnDataGroupChange(value))"
                                  ValueExpression="@(() => _model.SelectedDataGroup)"
                                  Value="@_model.SelectedDataGroup">
@@ -23,7 +23,7 @@
                             <option value="@grouping">@grouping</option>
                         }
                     </InputSelect>
-                    <InputSelect class="form-select mb-2" 
+                    <InputSelect 
                                  ValueChanged="@((string value) => OnDataPointChange(value))"
                                  ValueExpression="@(() => _model.SelectedDataPoint)"
                                  Value="@_model.SelectedDataPoint">
@@ -32,25 +32,25 @@
                             <option value="@point">@point</option>
                         }
                     </InputSelect>
-                    <div class="mb-2">
+                    <div>
                         <label>Start Date</label>
-                        <InputDate class="form-control mb-sm-1" @bind-Value="_model.StartDate"></InputDate>
-                        <input class="form-control mb-sm-1" type="time" @bind="_model.StartTime" />
+                        <InputDate @bind-Value="_model.StartDate"></InputDate>
+                        <input type="time" @bind="_model.StartTime" />
                     </div>
-                    <div class="mb-2">
+                    <div>
                         <label>End Date</label>
-                        <InputDate class="form-control mb-sm-1" @bind-Value="_model.EndDate"></InputDate>
-                        <input class="form-control mb-sm-1" type="time" @bind="_model.EndTime" />
+                        <InputDate @bind-Value="_model.EndDate"></InputDate>
+                        <input type="time" @bind="_model.EndTime" />
                     </div>
-                    <div class="mb-2">
+                    <div>
                         <fieldset>
                             <label>Synchronize End Time</label>
-                            <InputCheckbox class="form-control mb-sm-1" @bind-Value="_model.SyncEndTime"></InputCheckbox>
+                            <InputCheckbox @bind-Value="_model.SyncEndTime"></InputCheckbox>
                         </fieldset>
                     </div>
-                    <div class="mb-2">
+                    <div>
                         <label>Refresh Interval (ms)</label>
-                        <InputNumber class="form-control mb-sm-1" @bind-Value="_updateTimer.Interval"></InputNumber>
+                        <InputNumber @bind-Value="_updateTimer.Interval"></InputNumber>
                     </div>
                 </div>
             </div>
