@@ -51,7 +51,6 @@ pub async fn get_metric_series(
     let result = conn
         .run(move |c| metrix_database::get_metric_series_history(&getter, c))
         .await;
-    dbg!(&result[0].created_datetime);
     Json(result)
 }
 

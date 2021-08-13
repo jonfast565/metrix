@@ -15,7 +15,9 @@ mod send_metrics;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     headers();
     let (tx, rx) = unbounded();
-    set_ctrl_c_handler(tx);
+
+    ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))
+        .expect("Error setting Ctrl-C handler");
 
     let host_information = device_metrics::get_host_information().await?;
 
@@ -67,6 +69,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         memory_watcher(cancel, hi).await.expect("");
     });
 
+    wait_on_ctrl_c_block(rx);
+    info!("Ctrl + C finished");
     try_join!(
         mount_point_watcher_task,
         networks_watcher_task,
@@ -77,6 +81,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         cpu_watcher_task,
         memory_watcher_task
     )?;
+
     Ok(())
 }
 
@@ -297,14 +302,18 @@ fn headers() {
     println!("{}", metrix_utils::get_header("Agent"));
 }
 
-fn set_ctrl_c_handler(tx: Sender<()>) {
-    ctrlc::set_handler(move || tx.send(())
-        .expect("Could not send signal on channel."))
-        .expect("Error setting Ctrl-C handler");
-}
-
 fn wait_on_ctrl_c(rx: Receiver<()>) -> bool {
     match rx.recv_timeout(Duration::from_secs(1)) {
+        Ok(_) => {
+            info!("Application will quit now");
+            true
+        }
+        _ => false,
+    }
+}
+
+fn wait_on_ctrl_c_block(rx: Receiver<()>) -> bool {
+    match rx.recv() {
         Ok(_) => {
             info!("Application will quit now");
             true
