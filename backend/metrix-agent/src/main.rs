@@ -237,7 +237,7 @@ async fn cpu_watcher(
     rx: CancellationToken,
     sys_info: SystemInformation,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    const LIMIT: usize = 60;
+    const LIMIT: usize = 30;
     let mut average_cpu_user = Vec::<f64>::new();
     let mut average_cpu_system = Vec::<f64>::new();
     let mut average_cpu_idle = Vec::<f64>::new();
