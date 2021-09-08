@@ -14,8 +14,7 @@
             <div class="card">
                 <div class="card-section">
                     <h5>Options</h5>
-                    <InputSelect
-                                 ValueChanged="@((string value) => OnDataGroupChange(value))"
+                    <InputSelect ValueChanged="@((string value) => OnDataGroupChange(value))"
                                  ValueExpression="@(() => _model.SelectedDataGroup)"
                                  Value="@_model.SelectedDataGroup">
                         @foreach (var grouping in _dataGroupings)
@@ -23,8 +22,7 @@
                             <option value="@grouping">@grouping</option>
                         }
                     </InputSelect>
-                    <InputSelect 
-                                 ValueChanged="@((string value) => OnDataPointChange(value))"
+                    <InputSelect ValueChanged="@((string value) => OnDataPointChange(value))"
                                  ValueExpression="@(() => _model.SelectedDataPoint)"
                                  Value="@_model.SelectedDataPoint">
                         @foreach (var point in _dataPoints)
@@ -44,6 +42,8 @@
                     </div>
                     <div>
                         <fieldset>
+                            <label>Timer Enabled</label>
+                            <InputCheckbox @bind-Value="_updateTimer.Enabled"></InputCheckbox>
                             <label>Synchronize End Time</label>
                             <InputCheckbox @bind-Value="_model.SyncEndTime"></InputCheckbox>
                         </fieldset>
@@ -51,6 +51,9 @@
                     <div>
                         <label>Refresh Interval (ms)</label>
                         <InputNumber @bind-Value="_updateTimer.Interval"></InputNumber>
+                    </div>
+                    <div>
+                        <button class="success button" @onclick="@(async () => await LoadGraph())">Refresh</button>
                     </div>
                 </div>
             </div>
@@ -92,17 +95,20 @@
             Interval = 10000
         };
         _updateTimer.Elapsed += OnTimerElapsed;
-        _updateTimer.Enabled = true;
     }
 
     protected async void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
+        Console.WriteLine("Timer go");
         if (_model.SyncEndTime)
         {
             _model.RefreshEndTime();
         }
-        await LoadGraph();
-        StateHasChanged();
+        if (_model.TimerEnabled)
+        {
+            await LoadGraph();
+            StateHasChanged();
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

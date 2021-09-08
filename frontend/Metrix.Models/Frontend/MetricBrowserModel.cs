@@ -15,6 +15,7 @@ namespace Metrix.Models.Frontend
         public DateTime? EndDate { get; set; } = DateTime.Now.ToUniversalTime();
         public DateTime? EndTime { get; set; } = DateTime.Now.ToUniversalTime();
         public bool SyncEndTime { get; set; } = true;
+        public bool TimerEnabled { get; set; } = true;
 
         public void RefreshEndTime()
         {
